@@ -4,7 +4,7 @@ The public website for **YapTr** — a free, fully-local Japanese→English live
 subtitle translator for Windows. The app itself lives in a separate repo
 (`TranslateJP_EN`); this repo is only the site.
 
-**Live at <https://kairukai.github.io/YapTr_Website/>**
+**Live at <https://yaptr.app/>**
 
 It's a single static page with **no build step and no dependencies**:
 `index.html` holds the markup, CSS, and JS inline, and `assets/` holds the
@@ -27,7 +27,7 @@ Push to `main`. GitHub Pages serves from the repo root and redeploys
 automatically — no workflow file involved.
 
 One-time setup: **Settings → Pages → Source: Deploy from a branch → `main` /
-(root)**. The site then lives at `https://kairukai.github.io/YapTr_Website/`.
+(root)**. The site then lives at `https://yaptr.app/`.
 
 ## Downloads live here too
 
