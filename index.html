@@ -7,16 +7,47 @@
 <meta name="description" content="YapTr shows live English subtitles for Japanese audio playing on your PC. Runs entirely on your machine — no cloud, no account, no telemetry. Free for Windows.">
 <link rel="icon" href="assets/favicon.ico">
 
+<!-- Social preview. These URLs MUST stay absolute — crawlers don't resolve
+     relative paths, which is why the preview was blank before. If the site
+     ever moves to a custom domain, every og:/twitter: URL below has to change. -->
+<meta property="og:site_name" content="YapTr">
 <meta property="og:title" content="YapTr — Live Japanese to English subtitles">
 <meta property="og:description" content="Live English subtitles for Japanese audio playing on your PC. Fully local, free, no telemetry.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="assets/yappy-256.png">
+<meta property="og:url" content="https://kairukai.github.io/YapTr_Website/">
+<meta property="og:image" content="https://kairukai.github.io/YapTr_Website/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Yappy the bear beside the words: Japanese in. English on screen.">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="YapTr — Live Japanese to English subtitles">
+<meta name="twitter:description" content="Live English subtitles for Japanese audio playing on your PC. Fully local, free, no telemetry.">
+<meta name="twitter:image" content="https://kairukai.github.io/YapTr_Website/assets/og-image.png">
+
+<link rel="preload" href="assets/fonts/fredoka-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 
 <style>
+  /* Self-hosted so the site makes no third-party requests — the same promise
+     the app makes. Latin subsets only; the Japanese in the demo intentionally
+     falls back to the visitor's system CJK font. Both are variable fonts, so
+     one file covers every weight used here. */
+  @font-face {
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 300 700;
+    font-display: swap;
+    src: url('assets/fonts/fredoka-latin.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('assets/fonts/inter-latin.woff2') format('woff2');
+  }
+
   :root {
     --fur:      #8b5a32;
     --fur-lit:  #c98a4b;
@@ -74,6 +105,27 @@
   }
 
   h2 { font-size: clamp(30px, 4.6vw, 44px); font-weight: 700; }
+
+  /* ============ keyboard focus ============ */
+
+  /* :focus-visible only, so mouse clicks don't leave a ring behind but every
+     keyboard user can always see where they are. The muzzle cream reads clearly
+     against both the warm background and the red buttons. */
+  a:focus-visible, button:focus-visible {
+    outline: 3px solid var(--muzzle);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  .btn:focus-visible { outline-offset: 4px; }
+
+  .skip {
+    position: absolute; left: 12px; top: -60px; z-index: 60;
+    background: var(--muzzle); color: #16110e;
+    font-weight: 600; text-decoration: none;
+    padding: 11px 20px; border-radius: 0 0 10px 10px;
+    transition: top .18s ease;
+  }
+  .skip:focus { top: 0; }
 
   /* ============ nav ============ */
 
@@ -406,6 +458,8 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
+
 <nav>
   <div class="wrap">
     <img src="assets/yappy-64.png" alt="">
@@ -419,7 +473,7 @@
   </div>
 </nav>
 
-<header>
+<header id="main">
   <span class="blob a"></span>
   <span class="blob b"></span>
   <span class="blob c"></span>
@@ -441,7 +495,7 @@
       </svg>
       Download for Windows
     </a>
-    <p class="dl-meta">Version 1.0.0 &middot; 535&nbsp;MB &middot; Windows 10/11 (64-bit)</p>
+    <p class="dl-meta">Version <span data-app="version">1.0.0</span> &middot; <span data-app="size">535&nbsp;MB</span> &middot; Windows 10/11 (64-bit)</p>
 
     <!-- live subtitle demo -->
     <div class="demo" aria-hidden="true">
@@ -533,7 +587,7 @@
         <span class="emo">📦</span>
         <div>
           <h3>It's a big download</h3>
-          <p>535&nbsp;MB, because the translation model ships inside the installer. That's the trade: one larger download, in exchange for YapTr working offline the moment you install it instead of pulling gigabytes on first launch.</p>
+          <p><span data-app="size">535&nbsp;MB</span>, because the translation model ships inside the installer. That's the trade: one larger download, in exchange for YapTr working offline the moment you install it instead of pulling gigabytes on first launch.</p>
         </div>
       </div>
 
@@ -645,7 +699,7 @@
       </svg>
       Download for Windows
     </a>
-    <p class="dl-meta">Free and open source &middot; Version 1.0.0 &middot; 535&nbsp;MB</p>
+    <p class="dl-meta">Free and open source &middot; Version <span data-app="version">1.0.0</span> &middot; <span data-app="size">535&nbsp;MB</span></p>
   </div>
 </section>
 
@@ -661,6 +715,22 @@
 <script>
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ------------------------------------------------------------------
+     RELEASE — the single source of truth for the shipped version/size.
+     Update these two values on every release; they overwrite every
+     [data-app] span on the page (hero, download note, closing CTA).
+
+     The same values are also written literally into those spans as a
+     no-JS fallback. They should match, but if they ever drift, what you
+     set here is what virtually every visitor actually sees.
+     ------------------------------------------------------------------ */
+  var RELEASE = { version: '1.0.0', size: '535 MB' };
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-app]'), function (el) {
+    var v = RELEASE[el.getAttribute('data-app')];
+    if (v) { el.textContent = v; }
+  });
 
   /* ---- waveform bars ---- */
   var wave = document.getElementById('wave');

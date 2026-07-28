@@ -4,6 +4,9 @@
 The app itself lives in a separate repo (`TranslateJP_EN`); this repo is only
 the public website.
 
+**Live at <https://kairukai.github.io/YapTr_Website/>** — GitHub Pages, free
+tier, deploying from `main` / root. No custom domain (see §6).
+
 ---
 
 ## 0. What this site is for (scope)
@@ -36,25 +39,33 @@ map to one of them is a candidate for deletion**, not addition.
 | Page structure + copy | **DONE** — all sections built and rendering |
 | Visual design + motion | **DONE** — brand-matched, reduced-motion honored |
 | Brand assets | **DONE** — extracted from the app's real `jpen.ico` |
+| Deployment | **LIVE** — public repo, Pages on, HTTPS by default |
+| Fonts | **DONE** — self-hosted, zero third-party requests (§3) |
+| Social preview | **DONE** — 1200×630 card, absolute URLs (§4a) |
+| Keyboard accessibility | **DONE** — focus rings + skip link (§4b) |
+| Release values | **DONE** — single-sourced from one JS constant (§4c) |
 | About copy | **PLACEHOLDER — owner rewrite required** (§5) |
 | Download link | **BROKEN until a GitHub Release exists** (§5) |
-| Deployment | **NOT YET DEPLOYED** — Pages not enabled, nothing pushed |
 | Demo footage | **NOT STARTED** — simulated overlay stands in (§6) |
-
-Nothing is committed yet. The working tree holds the whole site.
 
 ---
 
 ## 2. Architecture
 
 ```
-index.html      the entire site — markup, CSS, and JS inline (~750 lines)
+index.html          the entire site — markup, CSS, and JS inline (~780 lines)
 assets/
-  yappy-256.png hero / about / closing mascot
-  yappy-64.png  nav + favicon-size mascot
-  favicon.ico   copied verbatim from the app's packaging/jpen.ico
-PLAN.md         this file
-README.md       orientation, points here
+  yappy-256.png     hero / about / closing mascot
+  yappy-64.png      nav + favicon-size mascot
+  favicon.ico       copied verbatim from the app's packaging/jpen.ico
+  og-image.png      1200x630 social preview card (generated — see §4a)
+  fonts/
+    fredoka-latin.woff2   headings, variable 300-700 (30 KB)
+    inter-latin.woff2     body, variable 100-900 (48 KB)
+tools/
+  og-card.html      source for og-image.png; never linked from the site
+PLAN.md             this file
+README.md           orientation, points here
 ```
 
 **There is no build step and no dependency tree.** Editing means opening
@@ -90,7 +101,18 @@ thing. Source of truth: `src/jpen/ui/mascot.py` and `ui/styles/dark.qss`.
 | `--bg` | `#16110e` | warm near-black (deliberately not neutral) |
 
 - **Type:** Fredoka (headings — rounded and friendly, matches the bear) + Inter
-  (body). Loaded from Google Fonts; see §5 for why that should change.
+  (body), both **self-hosted** in `assets/fonts/`.
+
+  They were originally loaded from Google Fonts, which was a quiet contradiction:
+  a page whose headline claim is *"nothing ever leaves your computer"* was making
+  a third-party request on every visit. The page now issues **zero third-party
+  requests**. Both are variable fonts, so one file per family covers every weight
+  (78 KB total), Latin subsets only — the Japanese in the demo deliberately falls
+  back to the visitor's system CJK font, which is how it already rendered.
+
+  To update a font, re-fetch the `latin` block from the Google Fonts CSS API with
+  a browser `User-Agent` (it serves `.woff2` only to modern UAs), drop the file
+  in `assets/fonts/`, and leave the `@font-face` rules alone.
 - **Motion:** mascot bob, drifting background blobs, waveform bounce, typing
   caret, hover lifts, scroll reveals. All of it collapses under
   `prefers-reduced-motion: reduce`, and the subtitle demo falls back to a static
@@ -140,29 +162,75 @@ is shown on first run for the same reason. Two standing rules:
   timing are tuned around Japanese speech, and that tuning is why it keeps up
   live.
 
+### 4a. Social preview
+
+`assets/og-image.png` is a 1200×630 card — Yappy, the headline, and three pills
+(Fully local / No telemetry / Free). It is **generated, not hand-drawn**: the
+source is `tools/og-card.html`, rendered with headless Edge. The exact command
+is in a comment at the top of that file.
+
+Two rules:
+
+- **The `og:` and `twitter:` URLs must stay absolute.** They were relative
+  originally, which meant crawlers couldn't resolve them and every shared link
+  rendered as a blank grey box. If the site ever moves to a custom domain, every
+  one of those URLs has to be updated — they hardcode the `github.io` origin.
+- **Keep the card exactly 1200×630.** That's what Discord, Slack, X and iMessage
+  crop to; anything else gets letterboxed.
+
+This matters more than it would for most sites. A niche tool spreads by someone
+pasting a link into a chat, so the preview card *is* a big share of the
+first impression.
+
+### 4b. Keyboard accessibility
+
+- `:focus-visible` rings (3px, muzzle cream, 3px offset) on every link and
+  button. `:focus-visible` rather than `:focus` so mouse clicks don't leave a
+  ring behind, while keyboard users always see where they are.
+- A **skip link** as the first focusable element, hidden off-screen until
+  focused, jumping to `#main` on the hero.
+
+There were no focus styles at all before this — keyboard users got the browser
+default, which is close to invisible on the red gradient buttons.
+
+### 4c. Release values (version and size)
+
+The version and download size appear in three places (hero meta, the download-size
+note, closing CTA). They used to be hardcoded in all three, which guarantees drift
+the first time a release ships.
+
+Now every occurrence is a `<span data-app="version">` / `<span data-app="size">`,
+overwritten on load from a single `RELEASE` constant at the top of the script.
+**Update that constant on each release and all three update together** — see the
+checklist in §7.
+
+The literal values remain in the HTML as a no-JS fallback, so the page is still
+correct with JavaScript disabled. That is technically a second copy; the constant
+is authoritative for essentially every real visitor, and the fallback is a
+belt-and-braces measure rather than something to maintain in lockstep.
+
 ---
 
 ## 5. Blocking items before launch
 
-Ordered. The first two are hard blockers.
+The site is deployed, but it is a **layout-and-copy test run** until these are
+done. Ordered; the first is a hard blocker.
 
-1. **Publish a GitHub Release.** Every CTA points at
-   `github.com/Kairukai/TranslateJP_EN/releases/latest`, which currently
-   **404s** — the app repo isn't publicly reachable and has no release. Until
-   that's fixed the download button, the `Source` link, and the `Report an issue`
-   link are all dead. No site change is needed once the release exists.
+1. **Publish a GitHub Release** for the app. Every CTA points at
+   `github.com/Kairukai/TranslateJP_EN/releases/latest`, which **404s** — the app
+   repo isn't publicly reachable and has no release. Until that's fixed the
+   download button, the `Source` link, and the `Report an issue` link are all
+   dead. No site change is needed once the release exists.
 2. **Rewrite the About copy.** The three paragraphs in `#about` are inferred
    placeholder text, marked with a `TODO` comment. They assume a personal-itch
    origin story, a solo project with no company, and the issue tracker as the
    contact route. Correct or replace.
 3. **Publish the installer's SHA-256** on the release page. The site tells
    people to verify against it, so it has to exist.
-4. **Self-host the fonts.** The page currently pulls Fredoka and Inter from
-   Google. A site whose headline claim is "no network requests" should not phone
-   home to Google either. Drop the two `.woff2` files into `assets/` and swap the
-   `<link>` for an inline `@font-face`.
-5. **Enable GitHub Pages** — Settings → Pages → `main` / root. Live at
-   `https://kairukai.github.io/YapTr_Website/`.
+
+**Done and no longer blocking:** fonts self-hosted (§3) · Pages enabled and live ·
+social preview fixed (§4a) · focus styles added (§4b) · release values
+single-sourced (§4c).
 
 ---
 
@@ -205,12 +273,32 @@ python -m http.server 8000 --directory . # matches how Pages serves it
 **Deploy** — `git push` to `main`. Pages redeploys automatically; there is no
 workflow file and nothing to trigger.
 
+**When the app ships a new release**
+
+1. Update the `RELEASE` constant in `index.html` (`version` and `size`). Keep the
+   non-breaking space in the size string so "535 MB" never wraps.
+2. Update the same two literals in the three `[data-app]` spans — they're the
+   no-JS fallback (§4c).
+3. Update the SHA-256 reference if the release page format changed.
+4. No change needed to the download links themselves — they point at
+   `/releases/latest`, which follows automatically.
+
+**Regenerating derived assets**
+
+- **Social card:** edit `tools/og-card.html`, then re-run the headless-Edge
+  command in its header comment. Output must stay 1200×630.
+- **Mascot:** re-extract from the app's `packaging/jpen.ico` (§2). Never edit
+  the PNGs by hand.
+
 **Conventions**
 - Keep everything in `index.html`. Don't split CSS/JS into separate files until
   there's a second page that shares them.
 - Match the surrounding style: CSS custom properties for anything reused, plain
   ES5-compatible JS in one IIFE, no libraries.
 - Every animation needs a `prefers-reduced-motion` answer.
+- Every interactive element needs a visible `:focus-visible` state (§4b).
+- **No third-party requests.** No CDNs, no hosted fonts, no analytics, no
+  embeds. If something needs an external file, vendor it into `assets/`.
 - Copy stays plain-spoken. No marketing superlatives, no "revolutionary",
   no invented capabilities. The honesty *is* the positioning.
 - Verify visually before committing — headless Edge works:
@@ -227,3 +315,6 @@ workflow file and nothing to trigger.
 | Mascot drifts out of sync with the app | Assets are re-extracted from `jpen.ico`, never hand-edited (§2) |
 | Page grows into an unmaintainable single file | Split at ~4 pages, and move to Astro rather than React (§2) |
 | Dead links if the app repo stays private | §5 item 1 is a hard launch blocker for exactly this reason |
+| Version drifts from the shipped installer | Single `RELEASE` constant + release checklist (§4c, §7) |
+| Social URLs break on a domain move | Flagged in §4a — they hardcode the `github.io` origin |
+| `PLAN.md` is public | Repo is public, so this file is world-readable. Nothing sensitive, but it does expose the roadmap and the placeholder/blocker list. Move it out if that stops being acceptable. |

@@ -4,9 +4,13 @@ The public website for **YapTr** — a free, fully-local Japanese→English live
 subtitle translator for Windows. The app itself lives in a separate repo
 (`TranslateJP_EN`); this repo is only the site.
 
+**Live at <https://kairukai.github.io/YapTr_Website/>**
+
 It's a single static page with **no build step and no dependencies**:
 `index.html` holds the markup, CSS, and JS inline, and `assets/` holds the
-mascot art extracted from the app's own icon.
+mascot art, fonts, and social card. The page makes **no third-party requests** —
+fonts are self-hosted and there is no analytics of any kind, matching the app's
+own privacy posture.
 
 ## Run it locally
 
@@ -25,11 +29,17 @@ automatically — no workflow file involved.
 One-time setup: **Settings → Pages → Source: Deploy from a branch → `main` /
 (root)**. The site then lives at `https://kairukai.github.io/YapTr_Website/`.
 
-## Before this goes live
+## Still a test run
 
-The download buttons point at the app's GitHub Releases page, which doesn't
-exist publicly yet, and the About section still contains placeholder copy.
-See **[PLAN.md](PLAN.md) §5** for the full launch checklist.
+The site is deployed, but the download buttons point at the app's GitHub
+Releases page, which doesn't exist publicly yet, and the About section still
+contains placeholder copy. See **[PLAN.md](PLAN.md) §5** for the short list of
+what's left.
+
+## Shipping a new app version
+
+Update the `RELEASE` constant in `index.html` — it drives the version and size
+shown in all three places on the page. Full checklist in **[PLAN.md](PLAN.md) §7**.
 
 ## Plan and conventions
 
