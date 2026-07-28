@@ -87,7 +87,7 @@ binary, and it is the price of keeping the source closed.
 ## 2. Architecture
 
 ```
-index.html          the entire site — markup, CSS, and JS inline (~780 lines)
+index.html          the entire site — markup, CSS, and JS inline (~1080 lines)
 assets/
   yappy-256.png     hero / about / closing mascot
   yappy-64.png      nav + favicon-size mascot
@@ -168,7 +168,8 @@ thing. Source of truth: `src/jpen/ui/mascot.py` and `ui/styles/dark.qss`.
 | 6 | Privacy | the differentiator vs. every cloud translator |
 | 7 | Requirements | pre-empt "will this run for me" |
 | 8 | About | who made it and why |
-| 9 | Closing CTA + footer | second download, source links |
+| 9 | Support (Ko-fi) | optional tip jar — see §4g for placement rules |
+| 10 | Closing CTA + footer | second download, links |
 
 ### The subtitle demo (§3 above)
 A simulated "Desktop audio" window: animated waveform, a Japanese line under
@@ -320,6 +321,89 @@ GitHub shows on the release.
 There's no way to disable it. On this repo those archives contain the *website's*
 source, which is already public — **not the app's**. Harmless, but expect the
 question.
+
+### 4g. Ko-fi / supporting the project
+
+<https://ko-fi.com/kairukai>, as a **dedicated "Support" section** — a card with
+Yappy beside a steaming mug, the heading *"Keep Yappy caffeinated."*, and a
+"Buy me a coffee" button. Plus a plain text link in the footer.
+
+**Placement: after About, before the closing download CTA.** The order is
+story → support → download, so the ask never sits between a visitor and the
+thing they came for. It started as a one-line mention in About and a footer pill;
+the owner asked for a full section, and the About sentence was then removed —
+asking three times on one page reads as nagging.
+
+**The button is gold (`--fur-lit` → `#9a6231`), not red.** Red is reserved for
+the download (§3, "red is rationed"). Two red buttons on one page compete, and
+the donate one would win attention it shouldn't have.
+
+Three standing rules:
+
+- **Plain `<a href>` only. Never Ko-fi's embed button, script, or floating
+  widget.** They load a script and image from `ko-fi.com`, which would break the
+  site's zero-third-party-request property (§3) — the exact thing the fonts were
+  self-hosted to achieve. The button and the mug are both drawn locally (inline
+  SVG + CSS steam animation) for this reason.
+- **Nothing may ever be gated behind it.** The site says so explicitly ("nothing
+  in the app is locked behind it, and nothing ever will be"). Introducing a paid
+  tier would make that line false and would also invalidate the "No ads, no
+  upsells" pill and "nothing to upsell you" in About.
+- **Voluntary tipping is not an upsell**, which is why those claims survive as
+  written. That distinction only holds while the rule above does.
+
+### 4h. Dancing gentleman Yappy (About section)
+
+A small easter egg under the About copy: Yappy in a top hat and tailcoat, doing
+a jig. No caption and no cane — both were tried and removed (see below).
+
+**How it's built.** The mascot art is a **head only**, so the hat, tailcoat,
+limbs and shoes are drawn as **inline SVG**, with `yappy-256.png`
+composited in via `<image>`. No new image assets, nothing fetched — consistent
+with the no-third-party-requests rule (§3).
+
+**It was first built out of CSS `div`s and looked like a blocky game avatar.**
+The rewrite to SVG fixed it, and the reasons are worth keeping:
+
+- **Limbs are round-capped strokes, not boxes.** A `<path>` with
+  `stroke-linecap: round` curves and reads as an arm; a rounded rectangle reads
+  as a brick. This is the single biggest difference.
+- **The silhouette is round.** Yappy is built from circles — a barrel torso with
+  sloped shoulders and a nipped waist belongs to the same character; a square
+  chest doesn't.
+- **The hat brim is an ellipse.** A flat rectangle brim has no perspective and
+  makes the whole figure look pasted together.
+- **Depth comes from layering and gradients** — coat tails behind the legs, the
+  far arm behind the torso, the near arm in front, plus a soft ground shadow
+  that contracts on the up-beat.
+
+**The cane was cut, after three attempts.** Worth recording so nobody re-adds it:
+at 230px wide a cane is a ~2px line, and because it has to swing with the arm it
+can never be planted on the ground — which is the pose that would actually sell
+it. A thin stick waving in mid-air reads as a stray mark no matter how it's
+coloured. Cream made it the brightest thing on the figure and pulled the eye off
+his face; muted brown fixed that but left it looking like a floating twig. The
+hat, tailcoat, lapels and bow tie carry "gentleman" on their own, and without it
+both paws read symmetrically and the silhouette is cleaner.
+
+Seven animations share a 1.3s beat so the movement stays in step: `jig`,
+`hat-tip`, `swing-l`/`swing-r` (arms, opposed), `kick-l`/`kick-r` (legs,
+opposed), and `shade`. Each limb group uses `transform-box: view-box` so
+`transform-origin` can be given in **SVG user units** — the real shoulder and hip
+coordinates. Without that, transforms pivot around each element's bounding-box
+centre and the limbs slide instead of swinging.
+
+**On the red bow tie:** §3 says red is rationed to CTAs and warnings. This is a
+deliberate exception, not a slip — red is already part of Yappy's own palette
+(it's his tongue in `mascot.py`), so on the character it reads as costume rather
+than as a call to action. Don't take it as licence to use red decoratively
+elsewhere.
+
+If the mascot art is ever re-extracted at a different size, the body is drawn
+against a 96×96 head at `x=52 y=34` in a `0 0 200 275` viewBox — change one and
+the rest needs re-tuning with it.
+
+
 
 
 
