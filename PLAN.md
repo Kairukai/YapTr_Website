@@ -11,7 +11,7 @@ tier, deploying from `main` / root. No custom domain (see §6).
 
 ## 0. What this site is for (scope)
 
-YapTr is a **free, unsigned, 510 MB Windows installer that captures desktop
+YapTr is a **free, unsigned, 511 MB Windows installer that captures desktop
 audio**. That single sentence decides the whole design. This site is not a
 product funnel, a docs portal, or a blog — it is a **download page plus a trust
 page**, and its job is to remove the reasons a first-time visitor bails:
@@ -41,7 +41,7 @@ on the free tier requires it), so publishing releases here costs nothing and
 creates nothing new to maintain.
 
 Release assets are stored outside the git repo and don't count toward its size,
-so a 510 MB installer here does not bloat the site's clone or its Pages deploy.
+so a 511 MB installer here does not bloat the site's clone or its Pages deploy.
 
 The owner's constraint is not wanting the code copied. Worth recording honestly:
 the installer is a PyInstaller freeze, and Python bytecode can be extracted from
@@ -76,7 +76,9 @@ binary, and it is the price of keeping the source closed.
 | Social preview | **DONE** — 1200×630 card, absolute URLs (§4a) |
 | Keyboard accessibility | **DONE** — focus rings + skip link (§4b) |
 | Release values | **DONE** — single-sourced from one JS constant (§4c) |
-| Download flow | **BUILT** — one-click direct-to-file (§4d), **untestable until a release exists** |
+| Download flow | **BUILT** — one-click direct-to-file (§4d) |
+| v1.0.0 release | **PUBLISHED** — installer attached, checksum in notes (§4f) |
+| Pushing the above | **PENDING — the live site is still the pre-fix version** (§5) |
 | About copy | **PLACEHOLDER — owner rewrite required** (§5) |
 | Demo footage | **NOT STARTED** — simulated overlay stands in (§6) |
 
@@ -300,36 +302,59 @@ visitor can disprove in one click. If the source is ever opened, add a LICENSE
 first — a public repo with no license is *source-available*, not open source,
 and still wouldn't justify the phrase.
 
+### 4f. Shipped releases
+
+| Version | Date | Asset | Size (as GitHub reports it) | SHA-256 |
+| --- | --- | --- | --- | --- |
+| v1.0.0 | 2026-07-28 | `YapTr-1.0.0-setup.exe` | 511 MB | `89121f952667b6c01b0fefb040685b104d433a46f3d5d8f1aefdea9f6809ab55` |
+
+**Quote sizes the way GitHub and Windows do.** The installer is 535,577,376
+bytes — 535 MB in decimal, but **511 MB** in the MiB units that Windows Explorer,
+browser download bars, and GitHub's release page all display. The site said
+"535 MB" at first; on a page asking people to trust an unsigned binary, a visitor
+seeing one number on the site and a different one in their download bar is
+exactly the kind of small inconsistency that plants doubt. Always use the number
+GitHub shows on the release.
+
+**GitHub auto-attaches "Source code (zip)" and "(tar.gz)" to every release.**
+There's no way to disable it. On this repo those archives contain the *website's*
+source, which is already public — **not the app's**. Harmless, but expect the
+question.
+
+
 
 ---
 
 ## 5. Blocking items before launch
 
-The site is deployed, but it is a **layout-and-copy test run** until these are
-done. Ordered; the first is a hard blocker.
+Ordered. The first is a hard blocker — until it happens, none of the work below
+is actually visible to anyone.
 
-1. **Publish a GitHub Release on this repo** with the installer attached.
-   Every CTA and both footer links point at it, and no release exists yet, so
-   they all 404 today. Releases → *Draft a new release* → tag `v1.0.0` → drag in
-   `YapTr-1.0.0-setup.exe` **without renaming it** (§4d) → Publish. Nothing else
-   to create; no site change needed afterwards.
-2. **Rewrite the About copy.** The three paragraphs in `#about` are inferred
+1. **Commit and push the working tree.** The fonts, social card and generator are
+   already committed and pushed (`7180722`, `e62ea7e`). Still local: the size
+   correction to 511 MB, the release record in §4f, and this section — i.e.
+   `index.html`, `PLAN.md`, `README.md` modified. Until they land, the live page
+   quotes the wrong download size.
+2. **Verify the download end to end** once pushed — click the hero button and
+   confirm `YapTr-1.0.0-setup.exe` starts downloading. The release exists (§4f),
+   but the URL has never been exercised.
+3. **Rewrite the About copy.** The three paragraphs in `#about` are inferred
    placeholder text, marked with a `TODO` comment. They assume a personal-itch
    origin story, a solo project with no company, and the issue tracker as the
    contact route. Correct or replace.
-3. **Publish the installer's SHA-256** on the release page. The site tells
-   people to verify against it, so it has to exist.
 
 **Done and no longer blocking:** fonts self-hosted (§3) · Pages enabled and live ·
 social preview fixed (§4a) · focus styles added (§4b) · release values
-single-sourced (§4c).
+single-sourced (§4c) · one-click download built (§4d) · open-source claims
+removed (§4e) · **v1.0.0 published with its SHA-256 (§4f)**.
 
 ---
 
 ## 6. Roadmap
 
 ### Phase 1 — Launch (blocked only by §5)
-Ship the page as-is once the release exists and About is rewritten.
+Push the pending work, confirm the download fires, rewrite About. The release
+itself is already published.
 
 ### Phase 2 — Real demo footage
 A short screen recording of the overlay subtitling an actual Japanese stream.
@@ -368,7 +393,7 @@ workflow file and nothing to trigger.
 **When the app ships a new release**
 
 1. Update the `RELEASE` constant in `index.html` (`version` and `size`). Keep the
-   non-breaking space in the size string so "510 MB" never wraps.
+   non-breaking space in the size string so "511 MB" never wraps.
 2. Update the same two literals in the three `[data-app]` spans — they're the
    no-JS fallback (§4c).
 3. Update the hardcoded `href` on the three `[data-dl]` buttons to the new

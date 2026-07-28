@@ -36,11 +36,14 @@ site's download buttons link straight to that asset. The app's own source repo
 stays private, and release assets don't count toward this repo's size — see
 **[PLAN.md](PLAN.md) §0 and §4d** for why it's set up this way.
 
-## Still a test run
+**v1.0.0 is published** — `YapTr-1.0.0-setup.exe`, 511 MB, SHA-256 in the release
+notes. Full record in **[PLAN.md](PLAN.md) §4f**.
 
-The site is deployed, but no release has been published yet, so every download
-button 404s. The About section also still contains placeholder copy. See
-**[PLAN.md](PLAN.md) §5** for the short list of what's left.
+## Not yet pushed
+
+The site's newest work is committed locally only, so the live URL still serves an
+older page. See **[PLAN.md](PLAN.md) §5** for what's outstanding — pushing is
+step 1, and the About section still contains placeholder copy.
 
 ## Shipping a new app version
 
