@@ -86,6 +86,9 @@
     letter-spacing: -0.01em;
     margin: 0;
     font-weight: 600;
+    /* Distribute words evenly across lines instead of leaving one orphan on
+       the last line. Ignored by older browsers, which just wrap normally. */
+    text-wrap: balance;
   }
 
   a { color: var(--muzzle); }
@@ -353,9 +356,12 @@
   /* ============ privacy ============ */
 
   .privacy { text-align: center; }
+  /* Capped to the same 640px column as the paragraph and pills below it.
+     Uncapped, this stretched the full 1080px container while everything under
+     it stayed narrow, which read as the heading falling out of the layout. */
   .privacy .big {
-    font-size: clamp(34px, 5.4vw, 54px); font-weight: 700;
-    margin: 0 0 20px;
+    font-size: clamp(32px, 5vw, 50px); font-weight: 700;
+    max-width: 640px; margin: 0 auto 20px;
   }
   .privacy .big em {
     font-style: normal;
@@ -365,7 +371,7 @@
   .privacy p { color: var(--dim); max-width: 640px; margin: 0 auto; font-size: 17.5px; }
   .pills {
     list-style: none; padding: 0; margin: 38px auto 0;
-    display: flex; flex-wrap: wrap; justify-content: center; gap: 11px; max-width: 740px;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 11px; max-width: 640px;
   }
   .pills li {
     border: 1px solid var(--line); background: var(--bg-2);
@@ -747,7 +753,7 @@
 <section id="privacy" class="privacy">
   <div class="wrap reveal">
     <p class="section-label">Privacy</p>
-    <p class="big display">Nothing <em>ever</em> leaves your computer.</p>
+    <h2 class="big">Nothing <em>ever</em> leaves your computer.</h2>
     <p>
       Audio and transcripts stay in memory and are never written to disk. YapTr makes
       no network requests at all beyond fetching the translation model, needs no
