@@ -3,8 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>YapTr — Live Japanese to English subtitles, fully local</title>
-<meta name="description" content="YapTr shows live English subtitles for Japanese audio playing on your PC. Runs entirely on your machine — no cloud, no account, no telemetry. Free for Windows.">
+<!-- Title leads with what people search for, not the brand — "YapTr" has no
+     search volume yet, so spending the first 40 characters on it wastes the
+     most valuable text on the page. Kept under ~60 chars so it isn't truncated. -->
+<title>Live Japanese to English Subtitles — Free & Offline | YapTr</title>
+<meta name="description" content="Free live Japanese to English subtitles for streams, VTubers and videos playing on your PC. Real-time, runs fully offline, no account and no subscription — ever.">
 <link rel="icon" href="assets/favicon.ico">
 
 <!-- Social preview. These URLs MUST stay absolute — crawlers don't resolve
@@ -24,6 +27,47 @@
 <meta name="twitter:title" content="YapTr — Live Japanese to English subtitles">
 <meta name="twitter:description" content="Live English subtitles for Japanese audio playing on your PC. Fully local, free, no telemetry.">
 <meta name="twitter:image" content="https://kairukai.github.io/YapTr_Website/assets/og-image.png">
+
+<link rel="canonical" href="https://kairukai.github.io/YapTr_Website/">
+
+<!-- SoftwareApplication schema. Tells search engines this is free Windows
+     software rather than a web translator, which is the distinction the page
+     lives or dies on. Deliberately NO aggregateRating — inventing review
+     scores violates Google's guidelines and would be a lie besides. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "YapTr",
+  "description": "Free live Japanese to English subtitle translator for Windows. Captures desktop audio and shows real-time English subtitles in an always-on-top overlay. Runs entirely offline with no account and no telemetry.",
+  "url": "https://kairukai.github.io/YapTr_Website/",
+  "applicationCategory": "MultimediaApplication",
+  "applicationSubCategory": "Translation software",
+  "operatingSystem": "Windows 10, Windows 11",
+  "softwareVersion": "1.0.0",
+  "fileSize": "511MB",
+  "downloadUrl": "https://github.com/Kairukai/YapTr_Website/releases/latest",
+  "installUrl": "https://github.com/Kairukai/YapTr_Website/releases/latest",
+  "screenshot": "https://kairukai.github.io/YapTr_Website/assets/og-image.png",
+  "image": "https://kairukai.github.io/YapTr_Website/assets/og-image.png",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "featureList": [
+    "Live Japanese to English subtitles",
+    "Captures desktop audio from any stream, video or game",
+    "Always-on-top click-through overlay",
+    "Runs fully offline after install",
+    "No account, no telemetry, nothing written to disk",
+    "Optional NVIDIA GPU acceleration"
+  ]
+}
+</script>
 
 <link rel="preload" href="assets/fonts/fredoka-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -392,6 +436,20 @@
   .req dd { margin: 0; font-family: Fredoka, sans-serif; font-size: 21px; font-weight: 600; }
   .req dd small { display: block; font-family: Inter, sans-serif; font-weight: 400; font-size: 14.5px; color: var(--dim); margin-top: 3px; }
 
+  /* ============ faq ============ */
+
+  .faq-list { margin-top: 40px; display: grid; gap: 14px; }
+  .faq-item {
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 16px; padding: 24px 28px;
+    transition: border-color .2s, background .2s;
+  }
+  .faq-item:hover { border-color: var(--fur); background: var(--bg-3); }
+  .faq-item h3 { font-size: 18.5px; font-weight: 600; margin-bottom: 8px; }
+  .faq-item p { color: var(--dim); margin: 0; font-size: 15.5px; }
+  .faq-item p + p { margin-top: 10px; }
+  .faq-item a { color: var(--muzzle); }
+
   /* ============ about ============ */
 
   .about-grid { margin-top: 40px; }
@@ -613,7 +671,7 @@
     <a class="link" href="#how">How it works</a>
     <a class="link" href="#before">Before you download</a>
     <a class="link" href="#privacy">Privacy</a>
-    <a class="link" href="#about">About</a>
+    <a class="link" href="#faq">FAQ</a>
     <a class="btn btn-sm" data-dl href="https://github.com/Kairukai/YapTr_Website/releases/latest/download/YapTr-1.0.0-setup.exe">Download</a>
   </div>
 </nav>
@@ -787,6 +845,99 @@
         <dt>Graphics card</dt>
         <dd>Not required<small>NVIDIA optional, for extra speed</small></dd>
       </dl>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap reveal">
+    <p class="section-label">FAQ</p>
+    <h2>Questions people actually ask.</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <h3>Is YapTr actually free?</h3>
+        <p>
+          Completely, and permanently. There is no paid tier, no trial period, no
+          licence key, no account, and no feature held back for a "pro" version.
+          You will never be asked for payment details, because there is nothing to
+          buy. If you want to chip in there's a <a href="#support">Ko-fi</a>, but
+          it unlocks nothing — the app is identical either way.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does it work with Twitch, YouTube and VTuber streams?</h3>
+        <p>
+          Yes. YapTr captures your PC's audio output rather than hooking into any
+          particular site or app, so it subtitles whatever is currently making
+          sound — a live stream in your browser, a VOD, a clip, a video call, or a
+          game. Nothing needs to be installed on the streaming side.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Do I need an internet connection?</h3>
+        <p>
+          Only to download it. The translation model ships inside the installer,
+          so YapTr works fully offline from the first launch — which is also why
+          the download is 511&nbsp;MB rather than pulling gigabytes afterwards.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Is my audio uploaded anywhere?</h3>
+        <p>
+          No. Translation happens on your own machine. Audio and transcripts stay
+          in memory, are never written to disk, and YapTr makes no network
+          requests beyond fetching the translation model. There's no account and
+          no telemetry of any kind.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Why are the subtitles slightly behind the audio?</h3>
+        <p>
+          YapTr waits for a natural pause before translating a chunk of speech —
+          it needs to hear a complete thought to translate it sensibly. That
+          delay is the trade for coherent sentences instead of word salad.
+        </p>
+        <p>
+          It's adjustable. A low-latency chunk profile cuts speech into shorter
+          pieces, and lowering the silence threshold makes it react faster at the
+          end of sentences. An NVIDIA GPU helps a lot too.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Do I need a good graphics card?</h3>
+        <p>
+          No. YapTr runs on your CPU by default and always will unless you turn
+          GPU mode on yourself. If you do have an NVIDIA card, enabling it gives a
+          large speedup — YapTr asks permission first, downloads NVIDIA's CUDA
+          runtime once, and falls back to CPU if anything goes wrong.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Can it translate languages other than Japanese?</h3>
+        <p>
+          Not right now. YapTr is tuned specifically for Japanese speech — the
+          segmentation and timing are built around it, and that tuning is a large
+          part of why it can keep up live. Other languages may come later, but
+          only once they'd work properly rather than badly.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How accurate is it?</h3>
+        <p>
+          Good enough to follow along, not good enough to quote. It's machine
+          translation, and accuracy drops with background music, noise, or people
+          talking over each other. Treat it as the gist rather than a script, and
+          don't rely on it for anything that actually matters.
+        </p>
+      </div>
     </div>
   </div>
 </section>

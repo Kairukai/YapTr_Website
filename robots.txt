@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# tools/og-card.html exists only to be rendered into assets/og-image.png.
+# It is not a page and shouldn't appear in search results.
+Disallow: /tools/
+
+Sitemap: https://kairukai.github.io/YapTr_Website/sitemap.xml

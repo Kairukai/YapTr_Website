@@ -1,0 +1,16 @@
+# Internal planning doc — kept local, not published.
+# README.md is deliberately NOT ignored: it's the repo's public face and
+# explains where the downloads live.
+PLAN.md
+
+# Local tooling / editor noise
+.claude/settings.local.json
+.vscode/
+.idea/
+*.code-workspace
+
+# OS cruft
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
