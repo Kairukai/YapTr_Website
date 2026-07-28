@@ -139,7 +139,7 @@
 
   .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
 
-  section { padding: 96px 0; position: relative; }
+  section { padding: 72px 0; position: relative; }
 
   .section-label {
     font-family: Fredoka, sans-serif;
@@ -182,13 +182,26 @@
     backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--line);
   }
-  nav .wrap { display: flex; align-items: center; gap: 11px; height: 64px; }
-  nav img { width: 32px; height: 32px; }
-  nav .name { font-family: Fredoka, sans-serif; font-weight: 700; font-size: 20px; }
+  /* Spacing is handled entirely by flex `gap` here. Mixing gap with per-link
+     margins previously gave the links 35px between them but left only 11px
+     before the Download button, which read as cramped. */
+  nav .wrap { display: flex; align-items: center; height: 64px; gap: 0; }
+
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--text);
+    padding: 4px 6px; margin-left: -6px; border-radius: 10px;
+  }
+  .brand img { width: 32px; height: 32px; transition: transform .2s var(--ease); }
+  .brand .name { font-family: Fredoka, sans-serif; font-weight: 700; font-size: 20px; }
+  .brand:hover img { transform: rotate(-8deg) scale(1.08); }
+
   nav .spacer { flex: 1; }
+
+  .nav-links { display: flex; align-items: center; gap: 30px; margin-right: 32px; }
   nav a.link {
     color: var(--dim); text-decoration: none; font-size: 15px;
-    margin-left: 24px; font-weight: 500; transition: color .18s;
+    font-weight: 500; transition: color .18s; white-space: nowrap;
   }
   nav a.link:hover { color: var(--text); }
 
@@ -425,34 +438,58 @@
   }
   .pills li:hover { transform: translateY(-3px) rotate(-1.5deg); border-color: var(--fur-lit); color: var(--muzzle); }
 
-  /* ============ requirements ============ */
-
-  .reqs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
-  .req {
-    background: var(--bg-2); border: 1px solid var(--line);
-    border-radius: 16px; padding: 24px 26px; margin: 0;
-  }
-  .req dt { font-size: 13px; color: var(--dim); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 7px; }
-  .req dd { margin: 0; font-family: Fredoka, sans-serif; font-size: 21px; font-weight: 600; }
-  .req dd small { display: block; font-family: Inter, sans-serif; font-weight: 400; font-size: 14.5px; color: var(--dim); margin-top: 3px; }
-
   /* ============ faq ============ */
 
-  .faq-list { margin-top: 40px; display: grid; gap: 14px; }
+  /* Native <details> accordions: no JavaScript, and search engines still index
+     collapsed content, so the SEO surface is unchanged. Collapsing suits an FAQ
+     specifically because people scan for THEIR question rather than reading it
+     through. */
+  .faq-list { margin-top: 36px; display: grid; gap: 10px; }
+
   .faq-item {
     background: var(--bg-2); border: 1px solid var(--line);
-    border-radius: 16px; padding: 24px 28px;
+    border-radius: 14px;
     transition: border-color .2s, background .2s;
   }
-  .faq-item:hover { border-color: var(--fur); background: var(--bg-3); }
-  .faq-item h3 { font-size: 18.5px; font-weight: 600; margin-bottom: 8px; }
-  .faq-item p { color: var(--dim); margin: 0; font-size: 15.5px; }
-  .faq-item p + p { margin-top: 10px; }
-  .faq-item a { color: var(--muzzle); }
+  .faq-item[open] { border-color: var(--fur); background: var(--bg-3); }
+  .faq-item:hover { border-color: var(--fur); }
+
+  .faq-item summary {
+    list-style: none; cursor: pointer;
+    padding: 18px 24px;
+    font-family: Fredoka, sans-serif;
+    font-size: 17.5px; font-weight: 600; color: var(--text);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+
+  /* chevron, rotates when open */
+  .faq-item summary::after {
+    content: ""; margin-left: auto; flex: 0 0 auto;
+    width: 9px; height: 9px;
+    border-right: 2px solid var(--fur-lit);
+    border-bottom: 2px solid var(--fur-lit);
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform .2s ease;
+  }
+  .faq-item[open] summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+
+  .faq-item summary:focus-visible { outline: 3px solid var(--muzzle); outline-offset: 2px; border-radius: 12px; }
+
+  .faq-body { padding: 0 24px 20px; }
+  .faq-body p { color: var(--dim); margin: 0; font-size: 15.5px; }
+  .faq-body p + p { margin-top: 10px; }
+  .faq-body a { color: var(--muzzle); }
 
   /* ============ about ============ */
 
-  .about-grid { margin-top: 40px; }
+  /* Copy left, dancing Yappy right — he fills what was dead space beside the
+     capped text column, which removes ~350px of page height for free. */
+  .about-grid {
+    margin-top: 40px;
+    display: grid; grid-template-columns: minmax(0, 62ch) 1fr;
+    gap: 40px; align-items: center;
+  }
   /* Capped measure — full-width prose at this font size runs to ~110 characters
      a line, which is tiring to read. 62ch keeps it comfortable. */
   .about-copy { max-width: 62ch; }
@@ -468,7 +505,7 @@
      is soft circles, and rectangles made him read as a blocky game avatar.
      All local: no extra image assets, nothing fetched. */
 
-  .dance-stage { margin: 58px auto 0; width: 230px; }
+  .dance-stage { margin: 0 auto; width: 230px; }
   .dance-stage svg { width: 100%; height: auto; overflow: visible; }
 
   /* Every part shares one 1.3s beat so the movement stays in step. */
@@ -525,39 +562,60 @@
   /* ============ support / ko-fi ============ */
 
   .support { text-align: center; }
-  .support-card {
+
+  /* Download and Ko-fi side by side. Equal columns, equal height — but the
+     download keeps the red button and the first (left) slot so it stays the
+     dominant action, per the rule in the plan that the tip jar must never
+     compete with it. */
+  .final-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 22px; align-items: stretch;
+  }
+
+  .final-card {
     position: relative; overflow: hidden;
-    max-width: 780px; margin: 40px auto 0;
-    background: linear-gradient(160deg, var(--bg-3), var(--bg-2) 62%, #1a1410);
-    border: 1px solid var(--line);
-    border-radius: 24px;
-    padding: 52px 40px 46px;
-    box-shadow: 0 26px 60px rgba(0,0,0,.42);
+    border: 1px solid var(--line); border-radius: 22px;
+    padding: 40px 34px 38px;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center;
+    box-shadow: 0 22px 52px rgba(0,0,0,.4);
+  }
+
+  .try-card {
+    background: linear-gradient(165deg, #241713, var(--bg-2) 62%, #1a1410);
+  }
+  .try-card::before {
+    content: ""; position: absolute; inset: auto -20% -55% -20%; height: 320px;
+    background: radial-gradient(420px 240px at 50% 90%, rgba(229,9,20,.20), transparent 70%);
+    pointer-events: none;
+  }
+  .try-card > * { position: relative; }
+  .try-card img { width: 84px; height: 84px; margin-bottom: 14px; animation: bob 3.6s ease-in-out infinite; }
+  .try-card h2 { font-size: clamp(26px, 3.4vw, 34px); margin-bottom: 22px; }
+
+  .support-card {
+    background: linear-gradient(165deg, var(--bg-3), var(--bg-2) 62%, #1a1410);
   }
   .support-card::before {
-    content: ""; position: absolute; inset: -60% -30% auto -30%; height: 420px;
-    background: radial-gradient(420px 260px at 50% 0%, rgba(201,138,75,.24), transparent 70%);
+    content: ""; position: absolute; inset: -60% -30% auto -30%; height: 340px;
+    background: radial-gradient(380px 220px at 50% 0%, rgba(201,138,75,.22), transparent 70%);
     pointer-events: none;
   }
   .support-card > * { position: relative; }
 
-  /* mascot + mug, side by side */
   .support-art {
     display: flex; align-items: flex-end; justify-content: center;
-    gap: 10px; margin-bottom: 24px;
+    gap: 10px; margin-bottom: 16px;
   }
-  .support-art img {
-    width: 96px; height: 96px;
-    animation: bob 3.6s ease-in-out infinite;
-  }
+  .support-art img { width: 84px; height: 84px; animation: bob 3.6s ease-in-out infinite; }
 
-  .mug { position: relative; width: 58px; height: 62px; }
+  .mug { position: relative; width: 52px; height: 56px; }
   .mug svg { width: 100%; height: 100%; }
   .mug .body { fill: var(--muzzle); }
   .mug .brew { fill: #6b4423; }
-  .steam { position: absolute; left: 0; right: 12px; top: -18px; height: 24px; }
+  .steam { position: absolute; left: 0; right: 12px; top: -16px; height: 22px; }
   .steam span {
-    position: absolute; bottom: 0; width: 4px; height: 14px;
+    position: absolute; bottom: 0; width: 4px; height: 13px;
     border-radius: 4px; background: rgba(240,222,186,.5);
     animation: rise 2.6s ease-in-out infinite;
   }
@@ -570,10 +628,9 @@
     100% { opacity: 0; transform: translateY(-18px) scaleY(1.25); }
   }
 
-  .support-card h2 { font-size: clamp(28px, 4.2vw, 40px); margin-bottom: 16px; }
+  .support-card h2 { font-size: clamp(26px, 3.4vw, 34px); margin-bottom: 14px; }
   .support-card p.lead {
-    color: var(--dim); font-size: 17px; max-width: 500px;
-    margin: 0 auto 30px;
+    color: var(--dim); font-size: 16px; max-width: 380px; margin: 0 auto 24px;
   }
   .support-card p.lead b { color: var(--text); font-weight: 600; }
 
@@ -591,21 +648,7 @@
   .btn-kofi:active { transform: translateY(2px); box-shadow: 0 3px 0 #6d4526; }
   .btn-kofi svg { width: 19px; height: 19px; }
 
-  .support-fine {
-    margin: 18px 0 0; font-size: 14px; color: var(--dim);
-  }
-
-  /* ============ closing ============ */
-
-  .closing { text-align: center; overflow: hidden; }
-  .closing::before {
-    content: ""; position: absolute; inset: auto -20% -40% -20%; height: 420px;
-    background: radial-gradient(560px 300px at 50% 80%, rgba(229,9,20,.18), transparent 70%);
-    pointer-events: none;
-  }
-  .closing .wrap { position: relative; z-index: 1; }
-  .closing img { width: 92px; height: 92px; margin-bottom: 18px; animation: bob 3.6s ease-in-out infinite; }
-  .closing h2 { margin-bottom: 28px; }
+  .support-fine { margin: 18px 0 0; font-size: 14px; color: var(--dim); }
 
   /* ============ footer ============ */
 
@@ -638,10 +681,12 @@
   /* ============ responsive ============ */
 
   @media (max-width: 820px) {
-    section { padding: 68px 0; }
+    section { padding: 56px 0; }
     header { padding: 48px 0 64px; }
-    .tiles, .reqs { grid-template-columns: 1fr; }
-    nav a.link { display: none; }
+    .tiles, .about-grid, .final-grid { grid-template-columns: 1fr; }
+    .about-grid { gap: 24px; }
+    .dance-stage { width: 190px; }
+    .nav-links { display: none; }
     .demo-body { padding: 24px 20px 26px; }
     .src-line { font-size: 20px; }
     .out-line { font-size: 18px; }
@@ -665,13 +710,19 @@
 
 <nav>
   <div class="wrap">
-    <img src="assets/yappy-64.png" alt="">
-    <span class="name">YapTr</span>
+    <!-- Whole lockup is one link back to the top, which is what people expect
+         from a site logo. -->
+    <a class="brand" href="#main" aria-label="YapTr - back to top">
+      <img src="assets/yappy-64.png" alt="">
+      <span class="name">YapTr</span>
+    </a>
     <span class="spacer"></span>
-    <a class="link" href="#how">How it works</a>
-    <a class="link" href="#before">Before you download</a>
-    <a class="link" href="#privacy">Privacy</a>
-    <a class="link" href="#faq">FAQ</a>
+    <div class="nav-links">
+      <a class="link" href="#how">How it works</a>
+      <a class="link" href="#before">Before you download</a>
+      <a class="link" href="#privacy">Privacy</a>
+      <a class="link" href="#faq">FAQ</a>
+    </div>
     <a class="btn btn-sm" data-dl href="https://github.com/Kairukai/YapTr_Website/releases/latest/download/YapTr-1.0.0-setup.exe">Download</a>
   </div>
 </nav>
@@ -793,7 +844,7 @@
         <span class="emo">📦</span>
         <div>
           <h3>It's a big download</h3>
-          <p><span data-app="size">511&nbsp;MB</span>, because the translation model ships inside the installer. That's the trade: one larger download, in exchange for YapTr working offline the moment you install it instead of pulling gigabytes on first launch.</p>
+          <p><span data-app="size">511&nbsp;MB</span>, because the translation model ships inside the installer. That's the trade: one larger download, in exchange for YapTr working offline the moment you install it instead of pulling gigabytes on first launch. Budget around 1.5&nbsp;GB of disk space once installed, more if you turn on GPU mode.</p>
         </div>
       </div>
 
@@ -828,116 +879,111 @@
   </div>
 </section>
 
-<section>
-  <div class="wrap reveal">
-    <p class="section-label">Requirements</p>
-    <h2>What you need.</h2>
-    <div class="reqs">
-      <dl class="req">
-        <dt>Operating system</dt>
-        <dd>Windows 10 or 11<small>64-bit only</small></dd>
-      </dl>
-      <dl class="req">
-        <dt>Disk space</dt>
-        <dd>~1.5 GB<small>More if you enable GPU mode</small></dd>
-      </dl>
-      <dl class="req">
-        <dt>Graphics card</dt>
-        <dd>Not required<small>NVIDIA optional, for extra speed</small></dd>
-      </dl>
-    </div>
-  </div>
-</section>
-
 <section id="faq">
   <div class="wrap reveal">
     <p class="section-label">FAQ</p>
     <h2>Questions people actually ask.</h2>
 
     <div class="faq-list">
-      <div class="faq-item">
-        <h3>Is YapTr actually free?</h3>
-        <p>
-          Completely, and permanently. There is no paid tier, no trial period, no
-          licence key, no account, and no feature held back for a "pro" version.
-          You will never be asked for payment details, because there is nothing to
-          buy. If you want to chip in there's a <a href="#support">Ko-fi</a>, but
-          it unlocks nothing — the app is identical either way.
-        </p>
-      </div>
+      <details class="faq-item">
+        <summary>Is YapTr actually free?</summary>
+        <div class="faq-body">
+  <p>
+            Completely, and permanently. There is no paid tier, no trial period, no
+            licence key, no account, and no feature held back for a "pro" version.
+            You will never be asked for payment details, because there is nothing to
+            buy. If you want to chip in there's a <a href="#support">Ko-fi</a>, but
+            it unlocks nothing — the app is identical either way.
+          </p>
+        </div>
+      </details>
 
-      <div class="faq-item">
-        <h3>Does it work with Twitch, YouTube and VTuber streams?</h3>
-        <p>
-          Yes. YapTr captures your PC's audio output rather than hooking into any
-          particular site or app, so it subtitles whatever is currently making
-          sound — a live stream in your browser, a VOD, a clip, a video call, or a
-          game. Nothing needs to be installed on the streaming side.
-        </p>
-      </div>
+      <details class="faq-item">
+        <summary>Does it work with Twitch, YouTube and VTuber streams?</summary>
+        <div class="faq-body">
+  <p>
+            Yes. YapTr captures your PC's audio output rather than hooking into any
+            particular site or app, so it subtitles whatever is currently making
+            sound — a live stream in your browser, a VOD, a clip, a video call, or a
+            game. Nothing needs to be installed on the streaming side.
+          </p>
+        </div>
+      </details>
 
-      <div class="faq-item">
-        <h3>Do I need an internet connection?</h3>
-        <p>
-          Only to download it. The translation model ships inside the installer,
-          so YapTr works fully offline from the first launch — which is also why
-          the download is 511&nbsp;MB rather than pulling gigabytes afterwards.
-        </p>
-      </div>
+      <details class="faq-item">
+        <summary>Do I need an internet connection?</summary>
+        <div class="faq-body">
+  <p>
+            Only to download it. The translation model ships inside the installer,
+            so YapTr works fully offline from the first launch — which is also why
+            the download is 511&nbsp;MB rather than pulling gigabytes afterwards.
+          </p>
+        </div>
+      </details>
 
-      <div class="faq-item">
-        <h3>Is my audio uploaded anywhere?</h3>
-        <p>
-          No. Translation happens on your own machine. Audio and transcripts stay
-          in memory, are never written to disk, and YapTr makes no network
-          requests beyond fetching the translation model. There's no account and
-          no telemetry of any kind.
-        </p>
-      </div>
+      <details class="faq-item">
+        <summary>Is my audio uploaded anywhere?</summary>
+        <div class="faq-body">
+  <p>
+            No. Translation happens on your own machine. Audio and transcripts stay
+            in memory, are never written to disk, and YapTr makes no network
+            requests beyond fetching the translation model. There's no account and
+            no telemetry of any kind.
+          </p>
+        </div>
+      </details>
 
-      <div class="faq-item">
-        <h3>Why are the subtitles slightly behind the audio?</h3>
-        <p>
-          YapTr waits for a natural pause before translating a chunk of speech —
-          it needs to hear a complete thought to translate it sensibly. That
-          delay is the trade for coherent sentences instead of word salad.
-        </p>
-        <p>
-          It's adjustable. A low-latency chunk profile cuts speech into shorter
-          pieces, and lowering the silence threshold makes it react faster at the
-          end of sentences. An NVIDIA GPU helps a lot too.
-        </p>
-      </div>
+      <details class="faq-item">
+        <summary>Why are the subtitles slightly behind the audio?</summary>
+        <div class="faq-body">
+  <p>
+            YapTr waits for a natural pause before translating a chunk of speech —
+            it needs to hear a complete thought to translate it sensibly. That
+            delay is the trade for coherent sentences instead of word salad.
+          </p>
+          <p>
+            It's adjustable. A low-latency chunk profile cuts speech into shorter
+            pieces, and lowering the silence threshold makes it react faster at the
+            end of sentences. An NVIDIA GPU helps a lot too.
+          </p>
+        </div>
+      </details>
 
-      <div class="faq-item">
-        <h3>Do I need a good graphics card?</h3>
-        <p>
-          No. YapTr runs on your CPU by default and always will unless you turn
-          GPU mode on yourself. If you do have an NVIDIA card, enabling it gives a
-          large speedup — YapTr asks permission first, downloads NVIDIA's CUDA
-          runtime once, and falls back to CPU if anything goes wrong.
-        </p>
-      </div>
+      <details class="faq-item">
+        <summary>Do I need a good graphics card?</summary>
+        <div class="faq-body">
+  <p>
+            No. YapTr runs on your CPU by default and always will unless you turn
+            GPU mode on yourself. If you do have an NVIDIA card, enabling it gives a
+            large speedup — YapTr asks permission first, downloads NVIDIA's CUDA
+            runtime once, and falls back to CPU if anything goes wrong.
+          </p>
+        </div>
+      </details>
 
-      <div class="faq-item">
-        <h3>Can it translate languages other than Japanese?</h3>
-        <p>
-          Not right now. YapTr is tuned specifically for Japanese speech — the
-          segmentation and timing are built around it, and that tuning is a large
-          part of why it can keep up live. Other languages may come later, but
-          only once they'd work properly rather than badly.
-        </p>
-      </div>
+      <details class="faq-item">
+        <summary>Can it translate languages other than Japanese?</summary>
+        <div class="faq-body">
+  <p>
+            Not right now. YapTr is tuned specifically for Japanese speech — the
+            segmentation and timing are built around it, and that tuning is a large
+            part of why it can keep up live. Other languages may come later, but
+            only once they'd work properly rather than badly.
+          </p>
+        </div>
+      </details>
 
-      <div class="faq-item">
-        <h3>How accurate is it?</h3>
-        <p>
-          Good enough to follow along, not good enough to quote. It's machine
-          translation, and accuracy drops with background music, noise, or people
-          talking over each other. Treat it as the gist rather than a script, and
-          don't rely on it for anything that actually matters.
-        </p>
-      </div>
+      <details class="faq-item">
+        <summary>How accurate is it?</summary>
+        <div class="faq-body">
+  <p>
+            Good enough to follow along, not good enough to quote. It's machine
+            translation, and accuracy drops with background music, noise, or people
+            talking over each other. Treat it as the gist rather than a script, and
+            don't rely on it for anything that actually matters.
+          </p>
+        </div>
+      </details>
     </div>
   </div>
 </section>
@@ -973,136 +1019,137 @@
           tracker is the fastest way to tell me.
         </p>
       </div>
+      <div class="dance-stage" aria-hidden="true">
+        <svg viewBox="0 0 200 275" role="presentation">
+          <defs>
+            <linearGradient id="coat" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#2e2e38"/>
+              <stop offset="1" stop-color="#131318"/>
+            </linearGradient>
+            <linearGradient id="limb" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#282831"/>
+              <stop offset="1" stop-color="#15151b"/>
+            </linearGradient>
+            <linearGradient id="hatg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#22222b"/>
+              <stop offset="1" stop-color="#101014"/>
+            </linearGradient>
+          </defs>
+
+          <ellipse class="d-shadow" cx="100" cy="258" rx="46" ry="7" fill="#000"/>
+
+          <g class="dancer">
+            <!-- coat tails, behind everything -->
+            <path d="M74,178 L64,224 L88,206 L92,180 Z" fill="#101015"/>
+            <path d="M126,178 L136,224 L112,206 L108,180 Z" fill="#101015"/>
+
+            <!-- legs: round-capped strokes, so they taper and curve like limbs -->
+            <g class="d-leg-l">
+              <path d="M88,192 Q84,218 85,236" stroke="url(#limb)" stroke-width="17" stroke-linecap="round" fill="none"/>
+              <ellipse cx="82" cy="241" rx="13" ry="7" fill="#0b0b0e"/>
+            </g>
+            <g class="d-leg-r">
+              <path d="M112,192 Q116,218 115,236" stroke="url(#limb)" stroke-width="17" stroke-linecap="round" fill="none"/>
+              <ellipse cx="118" cy="241" rx="13" ry="7" fill="#0b0b0e"/>
+            </g>
+
+            <!-- far arm, behind the body -->
+            <g class="d-arm-l">
+              <path d="M68,134 Q58,158 62,180" stroke="url(#limb)" stroke-width="15" stroke-linecap="round" fill="none"/>
+              <circle cx="62" cy="183" r="9.5" fill="#8b5a32"/>
+            </g>
+
+            <!-- torso: rounded barrel, sloped shoulders, nipped waist -->
+            <path d="M100,113 C83,113 70,120 65,134 L61,182 C61,195 78,201 100,201
+                     C122,201 139,195 139,182 L135,134 C130,120 117,113 100,113 Z"
+                  fill="url(#coat)"/>
+
+            <!-- shirt front + lapels -->
+            <path d="M100,116 L88,124 L92,180 L108,180 L112,124 Z" fill="#f0deba"/>
+            <path d="M99,114 L85,122 L80,152 C86,138 92,128 99,121 Z" fill="#383843"/>
+            <path d="M101,114 L115,122 L120,152 C114,138 108,128 101,121 Z" fill="#383843"/>
+
+            <!-- bow tie -->
+            <path d="M100,127 L85,119 L85,135 Z" fill="#e50914"/>
+            <path d="M100,127 L115,119 L115,135 Z" fill="#e50914"/>
+            <rect x="95.5" y="122" width="9" height="10" rx="3" fill="#b8070f"/>
+
+            <!-- near arm, drawn in front of the torso for depth -->
+            <g class="d-arm-r">
+              <path d="M132,134 Q142,158 138,180" stroke="url(#limb)" stroke-width="15" stroke-linecap="round" fill="none"/>
+              <circle cx="138" cy="183" r="9.5" fill="#8b5a32"/>
+            </g>
+
+            <!-- head -->
+            <image href="assets/yappy-256.png" x="52" y="34" width="96" height="96"/>
+
+            <!-- top hat: elliptical brim reads as 3D, flat rectangles don't -->
+            <g class="d-hat">
+              <path d="M77,12 L123,12 L124,40 L76,40 Z" fill="url(#hatg)"/>
+              <rect x="76" y="28" width="48" height="8" fill="#c98a4b"/>
+              <ellipse cx="100" cy="41" rx="37" ry="7" fill="#16161c"/>
+              <ellipse cx="100" cy="12" rx="23" ry="5" fill="#2a2a34"/>
+            </g>
+          </g>
+        </svg>
+      </div>
     </div>
 
-    <div class="dance-stage" aria-hidden="true">
-      <svg viewBox="0 0 200 275" role="presentation">
-        <defs>
-          <linearGradient id="coat" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#2e2e38"/>
-            <stop offset="1" stop-color="#131318"/>
-          </linearGradient>
-          <linearGradient id="limb" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#282831"/>
-            <stop offset="1" stop-color="#15151b"/>
-          </linearGradient>
-          <linearGradient id="hatg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#22222b"/>
-            <stop offset="1" stop-color="#101014"/>
-          </linearGradient>
-        </defs>
-
-        <ellipse class="d-shadow" cx="100" cy="258" rx="46" ry="7" fill="#000"/>
-
-        <g class="dancer">
-          <!-- coat tails, behind everything -->
-          <path d="M74,178 L64,224 L88,206 L92,180 Z" fill="#101015"/>
-          <path d="M126,178 L136,224 L112,206 L108,180 Z" fill="#101015"/>
-
-          <!-- legs: round-capped strokes, so they taper and curve like limbs -->
-          <g class="d-leg-l">
-            <path d="M88,192 Q84,218 85,236" stroke="url(#limb)" stroke-width="17" stroke-linecap="round" fill="none"/>
-            <ellipse cx="82" cy="241" rx="13" ry="7" fill="#0b0b0e"/>
-          </g>
-          <g class="d-leg-r">
-            <path d="M112,192 Q116,218 115,236" stroke="url(#limb)" stroke-width="17" stroke-linecap="round" fill="none"/>
-            <ellipse cx="118" cy="241" rx="13" ry="7" fill="#0b0b0e"/>
-          </g>
-
-          <!-- far arm, behind the body -->
-          <g class="d-arm-l">
-            <path d="M68,134 Q58,158 62,180" stroke="url(#limb)" stroke-width="15" stroke-linecap="round" fill="none"/>
-            <circle cx="62" cy="183" r="9.5" fill="#8b5a32"/>
-          </g>
-
-          <!-- torso: rounded barrel, sloped shoulders, nipped waist -->
-          <path d="M100,113 C83,113 70,120 65,134 L61,182 C61,195 78,201 100,201
-                   C122,201 139,195 139,182 L135,134 C130,120 117,113 100,113 Z"
-                fill="url(#coat)"/>
-
-          <!-- shirt front + lapels -->
-          <path d="M100,116 L88,124 L92,180 L108,180 L112,124 Z" fill="#f0deba"/>
-          <path d="M99,114 L85,122 L80,152 C86,138 92,128 99,121 Z" fill="#383843"/>
-          <path d="M101,114 L115,122 L120,152 C114,138 108,128 101,121 Z" fill="#383843"/>
-
-          <!-- bow tie -->
-          <path d="M100,127 L85,119 L85,135 Z" fill="#e50914"/>
-          <path d="M100,127 L115,119 L115,135 Z" fill="#e50914"/>
-          <rect x="95.5" y="122" width="9" height="10" rx="3" fill="#b8070f"/>
-
-          <!-- near arm, drawn in front of the torso for depth -->
-          <g class="d-arm-r">
-            <path d="M132,134 Q142,158 138,180" stroke="url(#limb)" stroke-width="15" stroke-linecap="round" fill="none"/>
-            <circle cx="138" cy="183" r="9.5" fill="#8b5a32"/>
-          </g>
-
-          <!-- head -->
-          <image href="assets/yappy-256.png" x="52" y="34" width="96" height="96"/>
-
-          <!-- top hat: elliptical brim reads as 3D, flat rectangles don't -->
-          <g class="d-hat">
-            <path d="M77,12 L123,12 L124,40 L76,40 Z" fill="url(#hatg)"/>
-            <rect x="76" y="28" width="48" height="8" fill="#c98a4b"/>
-            <ellipse cx="100" cy="41" rx="37" ry="7" fill="#16161c"/>
-            <ellipse cx="100" cy="12" rx="23" ry="5" fill="#2a2a34"/>
-          </g>
-        </g>
-      </svg>
-    </div>
   </div>
 </section>
 
 <section id="support" class="support">
   <div class="wrap reveal">
-    <p class="section-label">Support</p>
+    <div class="final-grid">
 
-    <div class="support-card">
-      <div class="support-art">
+      <!-- Primary action first, and on the left: the download must stay the
+           dominant call to action even sitting beside the donate card (§4g). -->
+      <div class="final-card try-card">
         <img src="assets/yappy-256.png" alt="">
-        <div class="mug" aria-hidden="true">
-          <div class="steam"><span></span><span></span><span></span></div>
-          <svg viewBox="0 0 58 62">
-            <path class="body" d="M6 16h34v28a12 12 0 0 1-12 12H18A12 12 0 0 1 6 44z"/>
-            <path class="brew" d="M11 21h24v10H11z"/>
-            <path class="body" d="M40 22h6a9 9 0 0 1 0 18h-6v-6h6a3 3 0 0 0 0-6h-6z"/>
+        <h2>Give it a try.</h2>
+        <a class="btn" data-dl href="https://github.com/Kairukai/YapTr_Website/releases/latest/download/YapTr-1.0.0-setup.exe">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 21h16"/>
           </svg>
-        </div>
+          Download for Windows
+        </a>
+        <p class="dl-meta">
+          Free, no account needed &middot; Version <span data-app="version">1.0.0</span> &middot; <span data-app="size">511&nbsp;MB</span><br>
+          <a class="quiet" href="https://github.com/Kairukai/YapTr_Website/releases/latest">Release notes &amp; SHA-256 checksum</a>
+        </p>
       </div>
 
-      <h2>Keep Yappy caffeinated.</h2>
+      <div class="final-card support-card">
+        <div class="support-art">
+          <img src="assets/yappy-256.png" alt="">
+          <div class="mug" aria-hidden="true">
+            <div class="steam"><span></span><span></span><span></span></div>
+            <svg viewBox="0 0 58 62">
+              <path class="body" d="M6 16h34v28a12 12 0 0 1-12 12H18A12 12 0 0 1 6 44z"/>
+              <path class="brew" d="M11 21h24v10H11z"/>
+              <path class="body" d="M40 22h6a9 9 0 0 1 0 18h-6v-6h6a3 3 0 0 0 0-6h-6z"/>
+            </svg>
+          </div>
+        </div>
 
-      <p class="lead">
-        YapTr is free and stays that way — <b>no ads, no accounts, nothing locked
-        behind a paywall.</b> If it's saved you some time and you feel like
-        chipping in, it genuinely helps.
-      </p>
+        <h2>Keep Yappy caffeinated.</h2>
 
-      <a class="btn-kofi" href="https://ko-fi.com/kairukai" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/>
-        </svg>
-        Buy me a coffee
-      </a>
+        <p class="lead">
+          YapTr is free and stays that way — <b>no paywall, ever.</b> If it's
+          saved you some time and you feel like chipping in, it genuinely helps.
+        </p>
 
-      <p class="support-fine">Entirely optional. Nothing in the app changes either way.</p>
+        <a class="btn-kofi" href="https://ko-fi.com/kairukai" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/>
+          </svg>
+          Buy me a coffee
+        </a>
+
+        <p class="support-fine">Entirely optional. Nothing in the app changes either way.</p>
+      </div>
+
     </div>
-  </div>
-</section>
-
-<section class="closing">
-  <div class="wrap reveal">
-    <img src="assets/yappy-256.png" alt="">
-    <h2>Give it a try.</h2>
-    <a class="btn" data-dl href="https://github.com/Kairukai/YapTr_Website/releases/latest/download/YapTr-1.0.0-setup.exe">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 21h16"/>
-      </svg>
-      Download for Windows
-    </a>
-    <p class="dl-meta">
-      Free, no account needed &middot; Version <span data-app="version">1.0.0</span> &middot; <span data-app="size">511&nbsp;MB</span><br>
-      <a class="quiet" href="https://github.com/Kairukai/YapTr_Website/releases/latest">Release notes &amp; SHA-256 checksum</a>
-    </p>
   </div>
 </section>
 
