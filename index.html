@@ -617,6 +617,43 @@
   .d-shadow { transform-box: view-box; transform-origin: 100px 258px; }
 
 
+  /* ============ community / discord ============ */
+
+  /* Deliberately a slim horizontal band, not a full card section — the page was
+     just cut by 30% and this shouldn't give it back. */
+  .community-bar {
+    display: flex; align-items: center; gap: 26px;
+    background: linear-gradient(160deg, var(--bg-3), var(--bg-2) 70%);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 26px 30px;
+  }
+  .community-bar .glyph {
+    flex: 0 0 auto; width: 46px; height: 46px;
+    display: grid; place-items: center;
+    background: linear-gradient(150deg, var(--fur), #6d4526);
+    border-radius: 13px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  }
+  .community-bar .glyph svg { width: 26px; height: 26px; fill: var(--muzzle); }
+  .community-bar .txt { flex: 1; min-width: 0; }
+  .community-bar h2 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .community-bar p { color: var(--dim); margin: 0; font-size: 15.5px; }
+
+  /* Ghost button, deliberately not a third filled colour. Hierarchy stays
+     red = download, gold = Ko-fi, outline = everything else. */
+  .btn-ghost {
+    flex: 0 0 auto;
+    display: inline-flex; align-items: center; gap: 9px;
+    border: 1px solid var(--fur); background: transparent;
+    color: var(--muzzle); text-decoration: none;
+    font-family: Fredoka, sans-serif; font-size: 16px; font-weight: 600;
+    padding: 12px 24px; border-radius: 11px;
+    transition: background .18s, border-color .18s, transform .18s var(--ease);
+  }
+  .btn-ghost:hover { background: rgba(201,138,75,.12); border-color: var(--fur-lit); transform: translateY(-2px); }
+  .btn-ghost svg { width: 18px; height: 18px; fill: currentColor; }
+
   /* ============ support / ko-fi ============ */
 
   .support { text-align: center; }
@@ -742,6 +779,7 @@
     section { padding: 56px 0; }
     header { padding: 48px 0 64px; }
     .tiles, .about-grid, .final-grid { grid-template-columns: 1fr; }
+    .community-bar { flex-direction: column; text-align: center; gap: 18px; }
     .about-grid { gap: 24px; }
     .dance-stage { width: 190px; }
     .note.spotlight .peek { width: 46px; top: -24px; right: 16px; }
@@ -1076,8 +1114,9 @@
         <p>
           It's free, and there's no company behind it — no accounts, no analytics,
           nothing to upsell you, and no plan to change that. If it's useful to
-          you, that's the whole point. If it gets something wrong, the issue
-          tracker is the fastest way to tell me.
+          you, that's the whole point. If it gets something wrong, the
+          <a href="https://discord.gg/KszM2kaWTn" target="_blank" rel="noopener noreferrer">Discord</a>
+          or the issue tracker are the fastest ways to tell me.
         </p>
       </div>
       <div class="dance-stage" aria-hidden="true">
@@ -1159,6 +1198,24 @@
   </div>
 </section>
 
+<section id="community">
+  <div class="wrap reveal">
+    <div class="community-bar">
+      <span class="glyph" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+      </span>
+      <div class="txt">
+        <h2>Come hang out.</h2>
+        <p>Bug reports, questions, or just telling me what you're watching — the Discord is the quickest way to reach me.</p>
+      </div>
+      <a class="btn-ghost" href="https://discord.gg/KszM2kaWTn" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+        Join the Discord
+      </a>
+    </div>
+  </div>
+</section>
+
 <section id="support" class="support">
   <div class="wrap reveal">
     <div class="final-grid">
@@ -1220,6 +1277,9 @@
     <span class="spacer"></span>
     <a href="https://github.com/Kairukai/YapTr_Website/releases">All releases</a>
     <a href="https://github.com/Kairukai/YapTr_Website/issues">Report an issue</a>
+    <!-- Plain link, never Discord's embed widget — it loads a script from
+         discord.com and would break the no-third-party-requests rule. -->
+    <a href="https://discord.gg/KszM2kaWTn" target="_blank" rel="noopener noreferrer">Discord</a>
     <a href="https://ko-fi.com/kairukai" target="_blank" rel="noopener noreferrer">Ko-fi</a>
   </div>
 </footer>
