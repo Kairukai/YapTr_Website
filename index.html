@@ -166,7 +166,13 @@
   }
   .btn-sm:hover { box-shadow: 0 6px 0 #9e0009; }
 
-  .dl-meta { margin-top: 18px; font-size: 14.5px; color: var(--dim); }
+  .dl-meta { margin-top: 18px; font-size: 14.5px; color: var(--dim); line-height: 1.9; }
+  .dl-meta .quiet {
+    color: var(--dim); text-decoration: underline;
+    text-decoration-color: var(--line); text-underline-offset: 3px;
+    transition: color .18s, text-decoration-color .18s;
+  }
+  .dl-meta .quiet:hover { color: var(--muzzle); text-decoration-color: var(--fur-lit); }
 
   /* ============ hero ============ */
 
@@ -469,7 +475,7 @@
     <a class="link" href="#before">Before you download</a>
     <a class="link" href="#privacy">Privacy</a>
     <a class="link" href="#about">About</a>
-    <a class="btn btn-sm" href="https://github.com/Kairukai/TranslateJP_EN/releases/latest">Download</a>
+    <a class="btn btn-sm" data-dl href="https://github.com/Kairukai/YapTr_Website/releases/latest/download/YapTr-1.0.0-setup.exe">Download</a>
   </div>
 </nav>
 
@@ -489,13 +495,16 @@
       no account, no telemetry — and it's free.
     </p>
 
-    <a class="btn" href="https://github.com/Kairukai/TranslateJP_EN/releases/latest">
+    <a class="btn" data-dl href="https://github.com/Kairukai/YapTr_Website/releases/latest/download/YapTr-1.0.0-setup.exe">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 21h16"/>
       </svg>
       Download for Windows
     </a>
-    <p class="dl-meta">Version <span data-app="version">1.0.0</span> &middot; <span data-app="size">535&nbsp;MB</span> &middot; Windows 10/11 (64-bit)</p>
+    <p class="dl-meta">
+      Version <span data-app="version">1.0.0</span> &middot; <span data-app="size">510&nbsp;MB</span> &middot; Windows 10/11 (64-bit)<br>
+      <a class="quiet" href="https://github.com/Kairukai/YapTr_Website/releases/latest">Release notes &amp; SHA-256 checksum</a>
+    </p>
 
     <!-- live subtitle demo -->
     <div class="demo" aria-hidden="true">
@@ -587,7 +596,7 @@
         <span class="emo">📦</span>
         <div>
           <h3>It's a big download</h3>
-          <p><span data-app="size">535&nbsp;MB</span>, because the translation model ships inside the installer. That's the trade: one larger download, in exchange for YapTr working offline the moment you install it instead of pulling gigabytes on first launch.</p>
+          <p><span data-app="size">510&nbsp;MB</span>, because the translation model ships inside the installer. That's the trade: one larger download, in exchange for YapTr working offline the moment you install it instead of pulling gigabytes on first launch.</p>
         </div>
       </div>
 
@@ -617,7 +626,7 @@
       <li>No telemetry</li>
       <li>Nothing saved to disk</li>
       <li>Works offline</li>
-      <li>Open source</li>
+      <li>No ads, no upsells</li>
     </ul>
   </div>
 </section>
@@ -668,10 +677,10 @@
           deliberately instead of many of them loosely.
         </p>
         <p>
-          It's built and maintained in the open, it's free, and it has no company
-          behind it — no accounts, no analytics, nothing to upsell you. If it's
-          useful to you, that's the whole point. If it gets something wrong, the
-          issue tracker is the fastest way to tell me.
+          It's free, and there's no company behind it — no accounts, no analytics,
+          nothing to upsell you, and no plan to change that. If it's useful to
+          you, that's the whole point. If it gets something wrong, the issue
+          tracker is the fastest way to tell me.
         </p>
       </div>
 
@@ -693,13 +702,16 @@
   <div class="wrap reveal">
     <img src="assets/yappy-256.png" alt="">
     <h2>Give it a try.</h2>
-    <a class="btn" href="https://github.com/Kairukai/TranslateJP_EN/releases/latest">
+    <a class="btn" data-dl href="https://github.com/Kairukai/YapTr_Website/releases/latest/download/YapTr-1.0.0-setup.exe">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 21h16"/>
       </svg>
       Download for Windows
     </a>
-    <p class="dl-meta">Free and open source &middot; Version <span data-app="version">1.0.0</span> &middot; <span data-app="size">535&nbsp;MB</span></p>
+    <p class="dl-meta">
+      Free, no account needed &middot; Version <span data-app="version">1.0.0</span> &middot; <span data-app="size">510&nbsp;MB</span><br>
+      <a class="quiet" href="https://github.com/Kairukai/YapTr_Website/releases/latest">Release notes &amp; SHA-256 checksum</a>
+    </p>
   </div>
 </section>
 
@@ -707,8 +719,8 @@
   <div class="wrap">
     <span>YapTr — free, local Japanese to English subtitles. For personal use.</span>
     <span class="spacer"></span>
-    <a href="https://github.com/Kairukai/TranslateJP_EN">Source</a>
-    <a href="https://github.com/Kairukai/TranslateJP_EN/issues">Report an issue</a>
+    <a href="https://github.com/Kairukai/YapTr_Website/releases">All releases</a>
+    <a href="https://github.com/Kairukai/YapTr_Website/issues">Report an issue</a>
   </div>
 </footer>
 
@@ -725,11 +737,26 @@
      no-JS fallback. They should match, but if they ever drift, what you
      set here is what virtually every visitor actually sees.
      ------------------------------------------------------------------ */
-  var RELEASE = { version: '1.0.0', size: '535 MB' };
+  var RELEASE = { version: '1.0.0', size: '510 MB' };
 
   Array.prototype.forEach.call(document.querySelectorAll('[data-app]'), function (el) {
     var v = RELEASE[el.getAttribute('data-app')];
     if (v) { el.textContent = v; }
+  });
+
+  /* Direct download. GitHub's /releases/latest/download/<file> path 302s
+     straight to the asset, so the browser starts downloading on click instead
+     of dropping the visitor on a release page to hunt for the right file.
+
+     The installer name embeds the version (Inno's OutputBaseFilename is
+     "YapTr-{version}-setup"), so the filename is built from RELEASE.version —
+     bumping that one constant updates the label AND the download URL. The
+     same URL is hardcoded in each button's href as a no-JS fallback. */
+  var DL = 'https://github.com/Kairukai/YapTr_Website/releases/latest/download/'
+         + 'YapTr-' + RELEASE.version + '-setup.exe';
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-dl]'), function (el) {
+    el.setAttribute('href', DL);
   });
 
   /* ---- waveform bars ---- */

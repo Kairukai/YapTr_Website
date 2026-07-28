@@ -29,12 +29,18 @@ automatically — no workflow file involved.
 One-time setup: **Settings → Pages → Source: Deploy from a branch → `main` /
 (root)**. The site then lives at `https://kairukai.github.io/YapTr_Website/`.
 
+## Downloads live here too
+
+The YapTr installer is published as a **GitHub Release on this repo**, and the
+site's download buttons link straight to that asset. The app's own source repo
+stays private, and release assets don't count toward this repo's size — see
+**[PLAN.md](PLAN.md) §0 and §4d** for why it's set up this way.
+
 ## Still a test run
 
-The site is deployed, but the download buttons point at the app's GitHub
-Releases page, which doesn't exist publicly yet, and the About section still
-contains placeholder copy. See **[PLAN.md](PLAN.md) §5** for the short list of
-what's left.
+The site is deployed, but no release has been published yet, so every download
+button 404s. The About section also still contains placeholder copy. See
+**[PLAN.md](PLAN.md) §5** for the short list of what's left.
 
 ## Shipping a new app version
 

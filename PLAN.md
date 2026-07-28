@@ -11,7 +11,7 @@ tier, deploying from `main` / root. No custom domain (see §6).
 
 ## 0. What this site is for (scope)
 
-YapTr is a **free, unsigned, 535 MB Windows installer that captures desktop
+YapTr is a **free, unsigned, 510 MB Windows installer that captures desktop
 audio**. That single sentence decides the whole design. This site is not a
 product funnel, a docs portal, or a blog — it is a **download page plus a trust
 page**, and its job is to remove the reasons a first-time visitor bails:
@@ -23,6 +23,38 @@ page**, and its job is to remove the reasons a first-time visitor bails:
 
 Every section on the page maps to one of those four. **Anything that doesn't
 map to one of them is a candidate for deletion**, not addition.
+
+### Distribution model (decided 2026-07-28)
+
+**The app's source stays private. Only the installer is public.**
+
+- `Kairukai/TranslateJP_EN` — **private**. Source, planning docs, git history.
+- `Kairukai/YapTr_Website` — **public** (this repo). The installer is published
+  as a **GitHub Release here**, on the website repo, rather than on the app repo
+  or a third repo.
+
+Why here: **release assets on a private repo require authentication to
+download** — an anonymous visitor gets a 404 — so the download has to be served
+from *some* public repo. A dedicated `YapTr-Releases` repo was considered and
+rejected as an unnecessary third repo; this one is already public (GitHub Pages
+on the free tier requires it), so publishing releases here costs nothing and
+creates nothing new to maintain.
+
+Release assets are stored outside the git repo and don't count toward its size,
+so a 510 MB installer here does not bloat the site's clone or its Pages deploy.
+
+The owner's constraint is not wanting the code copied. Worth recording honestly:
+the installer is a PyInstaller freeze, and Python bytecode can be extracted from
+those bundles and decompiled with common tools. Keeping the repo private stops
+casual copying, which is the actual concern, but it is a speed bump rather than
+real protection. Nothing on the site should claim otherwise.
+
+**Consequence for the copy:** the site previously claimed "Open source" in five
+places. With the source closed those claims are false, so they were removed —
+see §4e. The privacy claims (no telemetry, nothing written to disk, no network
+calls) remain, but visitors now have to take them on trust rather than being able
+to verify them. That is a real reduction in the trust story for an unsigned
+binary, and it is the price of keeping the source closed.
 
 ### Non-goals (deliberate)
 - No feature comparison tables, testimonials, pricing, or newsletter capture.
@@ -44,8 +76,8 @@ map to one of them is a candidate for deletion**, not addition.
 | Social preview | **DONE** — 1200×630 card, absolute URLs (§4a) |
 | Keyboard accessibility | **DONE** — focus rings + skip link (§4b) |
 | Release values | **DONE** — single-sourced from one JS constant (§4c) |
+| Download flow | **BUILT** — one-click direct-to-file (§4d), **untestable until a release exists** |
 | About copy | **PLACEHOLDER — owner rewrite required** (§5) |
-| Download link | **BROKEN until a GitHub Release exists** (§5) |
 | Demo footage | **NOT STARTED** — simulated overlay stands in (§6) |
 
 ---
@@ -209,6 +241,66 @@ correct with JavaScript disabled. That is technically a second copy; the constan
 is authoritative for essentially every real visitor, and the fallback is a
 belt-and-braces measure rather than something to maintain in lockstep.
 
+### 4d. Download links — one click, straight to the file
+
+All three buttons (nav, hero, closing) point at GitHub's direct-asset path on
+**this repo's** releases (see §0 — the app repo is private, so the download can't
+be served from there):
+
+```
+https://github.com/Kairukai/YapTr_Website/releases/latest/download/YapTr-<version>-setup.exe
+```
+
+That URL 302-redirects to the binary, so a click starts the download
+immediately rather than dropping the visitor on a release page to work out which
+file they need. `/latest/` resolves server-side, so it always tracks the newest
+release.
+
+**Hard dependency:** the release asset must be named exactly
+`YapTr-<version>-setup.exe`. That's what Inno Setup produces today
+(`OutputBaseFilename=YapTr-{#MyAppVersion}-setup` in `installer.iss`), so
+attaching the build output unmodified is all that's required. **Renaming the
+asset on the release breaks every download button on the site**, silently, with
+a 404.
+
+Because the filename embeds the version, the URL is **built in JS from
+`RELEASE.version`** rather than written out — bumping that one constant updates
+the button labels and all three download URLs together. The full URL is also in
+each `href` as a no-JS fallback.
+
+Alongside the buttons is a quieter **"Release notes & SHA-256 checksum"** link to
+the release page itself. That's deliberate: §4's trust section tells people to
+verify the installer's hash, so there has to be a route to it. Direct download
+for the 95% who just want the app, one small link for the people who check.
+
+**Hard dependency #2:** this repo must stay **public**. Flipping it private
+404s every download button. In practice that's already locked in — free GitHub
+Pages requires a public repo, so the site would go dark at the same moment.
+
+> **Not testable yet.** No release has been published, so these URLs are
+> unverified. The first thing to check after publishing is that the hero button
+> actually starts a download.
+
+### 4e. What the site does NOT claim
+
+The source is closed (§0), so these were removed rather than left as
+comfortable-but-false marketing:
+
+| Was | Now | Where |
+| --- | --- | --- |
+| "Open source" pill | "No ads, no upsells" | privacy pills |
+| "Free and open source" | "Free, no account needed" | closing CTA |
+| "built and maintained in the open" | "there's no company behind it" | About |
+| `Source` → app repo | `All releases` → this repo's releases | footer |
+| `Report an issue` → app repo | same, on this repo's issues | footer |
+
+**Standing rule: don't reintroduce them.** "Open source" has a specific meaning,
+and a page whose entire strategy is candour cannot afford a claim a curious
+visitor can disprove in one click. If the source is ever opened, add a LICENSE
+first — a public repo with no license is *source-available*, not open source,
+and still wouldn't justify the phrase.
+
+
 ---
 
 ## 5. Blocking items before launch
@@ -216,11 +308,11 @@ belt-and-braces measure rather than something to maintain in lockstep.
 The site is deployed, but it is a **layout-and-copy test run** until these are
 done. Ordered; the first is a hard blocker.
 
-1. **Publish a GitHub Release** for the app. Every CTA points at
-   `github.com/Kairukai/TranslateJP_EN/releases/latest`, which **404s** — the app
-   repo isn't publicly reachable and has no release. Until that's fixed the
-   download button, the `Source` link, and the `Report an issue` link are all
-   dead. No site change is needed once the release exists.
+1. **Publish a GitHub Release on this repo** with the installer attached.
+   Every CTA and both footer links point at it, and no release exists yet, so
+   they all 404 today. Releases → *Draft a new release* → tag `v1.0.0` → drag in
+   `YapTr-1.0.0-setup.exe` **without renaming it** (§4d) → Publish. Nothing else
+   to create; no site change needed afterwards.
 2. **Rewrite the About copy.** The three paragraphs in `#about` are inferred
    placeholder text, marked with a `TODO` comment. They assume a personal-itch
    origin story, a solo project with no company, and the issue tracker as the
@@ -276,12 +368,15 @@ workflow file and nothing to trigger.
 **When the app ships a new release**
 
 1. Update the `RELEASE` constant in `index.html` (`version` and `size`). Keep the
-   non-breaking space in the size string so "535 MB" never wraps.
+   non-breaking space in the size string so "510 MB" never wraps.
 2. Update the same two literals in the three `[data-app]` spans — they're the
    no-JS fallback (§4c).
-3. Update the SHA-256 reference if the release page format changed.
-4. No change needed to the download links themselves — they point at
-   `/releases/latest`, which follows automatically.
+3. Update the hardcoded `href` on the three `[data-dl]` buttons to the new
+   filename — same no-JS fallback reasoning as step 2.
+4. **Attach the installer to the release without renaming it.** The site's
+   download URL is built as `YapTr-<version>-setup.exe`; any other asset name
+   404s every download button (§4d).
+5. After publishing, click the hero button once and confirm a download starts.
 
 **Regenerating derived assets**
 
@@ -316,5 +411,9 @@ workflow file and nothing to trigger.
 | Page grows into an unmaintainable single file | Split at ~4 pages, and move to Astro rather than React (§2) |
 | Dead links if the app repo stays private | §5 item 1 is a hard launch blocker for exactly this reason |
 | Version drifts from the shipped installer | Single `RELEASE` constant + release checklist (§4c, §7) |
+| Release asset renamed → every download 404s | Called out in §4d and step 4 of the release checklist |
+| This repo flipped private → every download 404s | §4d hard dependency #2. Low risk: free Pages already requires it to be public |
+| Closed source weakens the trust story | Accepted tradeoff (§0). Mitigated by publishing a SHA-256 and by the candour of §4's "Before you download" |
+| "Open source" creeps back into the copy | §4e records exactly what was removed and why |
 | Social URLs break on a domain move | Flagged in §4a — they hardcode the `github.io` origin |
 | `PLAN.md` is public | Repo is public, so this file is world-readable. Nothing sensitive, but it does expose the roadmap and the placeholder/blocker list. Move it out if that stops being acceptable. |
