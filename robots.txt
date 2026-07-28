@@ -5,4 +5,4 @@ Allow: /
 # It is not a page and shouldn't appear in search results.
 Disallow: /tools/
 
-Sitemap: https://kairukai.github.io/YapTr_Website/sitemap.xml
+Sitemap: https://yaptr.app/sitemap.xml
