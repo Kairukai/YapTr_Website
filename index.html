@@ -8,7 +8,11 @@
      most valuable text on the page. Kept under ~60 chars so it isn't truncated. -->
 <title>Live Japanese to English Subtitles — Free & Offline | YapTr</title>
 <meta name="description" content="Free live Japanese to English subtitles for streams, VTubers and videos playing on your PC. Real-time, runs fully offline, no account and no subscription — ever.">
-<link rel="icon" href="assets/favicon.ico">
+<!-- Root-level favicon: browsers request /favicon.ico automatically regardless
+     of this tag, so serving it there avoids a guaranteed 404 on every visit.
+     16/32/48 only, PNG-compressed (5 KB). The app's own .ico is 372 KB because
+     Windows needs sizes up to 256px — a browser never uses those. -->
+<link rel="icon" href="/favicon.ico" sizes="any">
 
 <!-- Social preview. These URLs MUST stay absolute — crawlers don't resolve
      relative paths, which is why the preview was blank before. If the site
