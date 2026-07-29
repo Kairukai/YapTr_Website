@@ -238,6 +238,18 @@
   }
   .dl-meta .quiet:hover { color: var(--muzzle); text-decoration-color: var(--fur-lit); }
 
+  .dl-count {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin: 14px 0 0;
+    padding: 7px 16px 7px 13px;
+    border: 1px solid var(--line); border-radius: 100px;
+    background: var(--bg-2);
+    font-size: 14.5px; color: var(--dim);
+  }
+  .dl-count[hidden] { display: none; }
+  .dl-count strong { color: var(--muzzle); font-weight: 600; }
+  .dl-count svg { width: 15px; height: 15px; color: var(--fur-lit); }
+
   /* ============ hero ============ */
 
   header {
@@ -853,6 +865,17 @@
     <p class="dl-meta">
       Version <span data-app="version">1.0.0</span> &middot; <span data-app="size">511&nbsp;MB</span> &middot; Windows 10/11 (64-bit)<br>
       <a class="quiet" href="https://github.com/Kairukai/YapTr_Website/releases/latest">Release notes &amp; SHA-256 checksum</a>
+    </p>
+
+    <!-- Real figure, written by .github/workflows/download-count.yml from
+         GitHub's release API. The `hidden` attribute is toggled by that same
+         script: it stays hidden until the count clears the threshold, because a
+         low number is worse than no number. Never edit the value by hand. -->
+    <p class="dl-count">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 21h16"/>
+      </svg>
+      <strong><!--DL_COUNT-->8<!--/DL_COUNT--></strong>&nbsp;downloads so far
     </p>
 
     <!-- live subtitle demo -->

@@ -1,0 +1,50 @@
+name: Update download count
+
+# NOTE: scheduled workflows only run on the repository's DEFAULT branch.
+# While this lives on `download_counter` it will never fire on its own — it
+# only starts once merged into `main`. Use "Run workflow" to test it manually
+# from any branch in the meantime.
+
+on:
+  schedule:
+    # Weekly, Monday 04:17 UTC. Off-the-hour on purpose: GitHub's scheduler is
+    # heavily contended at :00 and jobs get delayed.
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+# Least privilege: the job only needs to push the one-line change back.
+permissions:
+  contents: write
+
+concurrency:
+  group: download-count
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bake the count into index.html
+        env:
+          # The default token is enough for public release data, and lifts the
+          # unauthenticated 60/hour rate limit.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COUNT_REPO: ${{ github.repository }}
+          # 0 = always show. Raise it if a low count ever starts
+          # working against you on the live site.
+          COUNT_THRESHOLD: "0"
+        run: python3 .github/scripts/update_downloads.py
+
+      - name: Commit if the number changed
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "count unchanged - nothing to commit"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "chore: update download count [skip ci]"
+          git push
