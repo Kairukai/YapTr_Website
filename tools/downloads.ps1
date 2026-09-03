@@ -45,11 +45,7 @@ foreach ($rel in $releases) {
 Write-Host ""
 Write-Host "TOTAL INSTALLER DOWNLOADS: $total"
 
-# The site's download counter stays off until this clears ~500. Below that a
-# visible count reads as "nobody uses this". See PLAN.md roadmap Phase 7.
-if ($total -lt 500) {
-    Write-Host "(Threshold is 500 - not worth showing on the site yet.)"
-} else {
-    Write-Host "(Above threshold - the download counter is worth adding now.)"
-}
+# The site counter is built on the download_counter branch and its threshold is
+# currently 0 - it shows whatever the real number is. This script only reports;
+# .github/workflows/download-count.yml is what writes the figure into index.html.
 Write-Host ""

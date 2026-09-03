@@ -15,6 +15,7 @@ on:
 # Least privilege: the job only needs to push the one-line change back.
 permissions:
   contents: write
+  pages: write      # needed to request a Pages rebuild explicitly (see below)
 
 concurrency:
   group: download-count
@@ -46,5 +47,16 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "chore: update download count [skip ci]"
+          git commit -m "chore: update download count"
           git push
+
+      # Pushes authenticated with GITHUB_TOKEN do NOT trigger other workflows,
+      # including GitHub's pages-build-deployment. Without this the number would
+      # change in the repo but never reach yaptr.app. Non-fatal: if the endpoint
+      # is unavailable the commit still landed and the next real push publishes.
+      - name: Request a Pages rebuild
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api --method POST "repos/${{ github.repository }}/pages/builds"             && echo "Pages build requested"             || echo "could not request a Pages build - the commit is in regardless"
