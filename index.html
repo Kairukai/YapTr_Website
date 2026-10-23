@@ -202,7 +202,7 @@
 
   nav .spacer { flex: 1; }
 
-  .nav-links { display: flex; align-items: center; gap: 30px; margin-right: 32px; }
+  .nav-links { display: flex; align-items: center; gap: 24px; margin-right: 24px; }
   nav a.link {
     color: var(--dim); text-decoration: none; font-size: 15px;
     font-weight: 500; transition: color .18s; white-space: nowrap;
@@ -249,6 +249,52 @@
   .dl-count[hidden] { display: none; }
   .dl-count strong { color: var(--muzzle); font-weight: 600; }
   .dl-count svg { width: 15px; height: 15px; color: var(--fur-lit); }
+
+  /* ============ sharing ============ */
+
+  .share-row { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+  .share-trigger, .share-option, .share-copy, .share-native, .share-close {
+    font: inherit; cursor: pointer; color: var(--muzzle);
+    border: 1px solid var(--line); background: var(--bg-2);
+  }
+  .share-trigger {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 9px 16px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    transition: border-color .18s, background .18s;
+  }
+  .share-trigger[hidden], .share-native[hidden] { display: none; }
+  .share-trigger:hover, .share-option:hover, .share-copy:hover, .share-native:hover, .share-close:hover {
+    border-color: var(--fur-lit); background: var(--bg-3);
+  }
+  .share-trigger svg { width: 17px; height: 17px; }
+  .share-invite { color: var(--dim); font-size: 14px; margin: 18px 0 0; }
+  .share-dialog {
+    width: min(460px, calc(100% - 32px)); max-width: none; max-height: calc(100vh - 48px);
+    padding: 28px; overflow-y: auto; border: 1px solid var(--line); border-radius: 20px;
+    background: var(--bg); color: var(--text); box-shadow: 0 24px 80px rgba(0,0,0,.6);
+  }
+  .share-dialog:not([open]) { display: none; }
+  .share-dialog::backdrop { background: rgba(0,0,0,.72); }
+  .share-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .share-heading h2 { font-size: 28px; }
+  .share-close { width: 38px; height: 38px; flex: 0 0 auto; border-radius: 10px; font-size: 25px; line-height: 1; }
+  .share-description { color: var(--dim); font-size: 14px; margin: 12px 0 22px; }
+  .share-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .share-option {
+    display: flex; align-items: center; gap: 10px; min-height: 48px;
+    padding: 10px 14px; border-radius: 11px; text-decoration: none; font-size: 14px; font-weight: 600;
+  }
+  .share-option svg { width: 22px; height: 22px; flex: 0 0 auto; fill: currentColor; }
+  .share-link-label { display: block; color: var(--dim); font-size: 13px; margin: 22px 0 8px; }
+  .share-link-row { display: flex; gap: 8px; }
+  .share-link-row input {
+    min-width: 0; width: 100%; border: 1px solid var(--line); border-radius: 10px;
+    background: var(--bg-2); color: var(--text); padding: 11px 12px; font: inherit; font-size: 14px;
+  }
+  .share-link-row input:focus-visible { outline: 3px solid var(--muzzle); outline-offset: 3px; }
+  .share-copy { padding: 10px 15px; border-radius: 10px; white-space: nowrap; font-size: 14px; font-weight: 600; }
+  .share-native { width: 100%; padding: 11px; border-radius: 10px; margin-top: 12px; font-size: 14px; }
+  .share-status { min-height: 1.65em; color: var(--muzzle); font-size: 13px; margin: 12px 0 0; }
 
   /* ============ hero ============ */
 
@@ -633,7 +679,22 @@
   .d-shadow { transform-box: view-box; transform-origin: 100px 258px; }
 
 
-  /* ============ community / discord ============ */
+  /* ============ bugs, feedback / community ============ */
+
+  #feedback, #community { scroll-margin-top: 88px; }
+  .feedback-intro { color: var(--dim); max-width: 640px; margin: 16px 0 0; }
+  .feedback-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 32px; }
+  .feedback-card {
+    display: flex; flex-direction: column; align-items: flex-start;
+    padding: 28px; border: 1px solid var(--line); border-radius: 18px;
+    background: linear-gradient(160deg, var(--bg-3), var(--bg-2) 70%);
+  }
+  .feedback-card .feedback-icon { width: 30px; height: 30px; margin-bottom: 16px; color: var(--fur-lit); }
+  .feedback-card h3 { font-size: 24px; }
+  .feedback-card p { color: var(--dim); font-size: 15.5px; margin: 14px 0 24px; }
+  .feedback-card .btn-ghost { margin-top: auto; }
+  .feedback-note { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; margin: 18px 0 24px; font-size: 14px; color: var(--dim); }
+  .feedback-note a { text-underline-offset: 3px; }
 
   /* Deliberately a slim horizontal band, not a full card section — the page was
      just cut by 30% and this shouldn't give it back. */
@@ -653,7 +714,7 @@
   }
   .community-bar .glyph svg { width: 26px; height: 26px; fill: var(--muzzle); }
   .community-bar .txt { flex: 1; min-width: 0; }
-  .community-bar h2 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .community-bar h3 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
   .community-bar p { color: var(--dim); margin: 0; font-size: 15.5px; }
 
   /* Ghost button, deliberately not a third filled colour. Hierarchy stays
@@ -794,7 +855,7 @@
   @media (max-width: 820px) {
     section { padding: 56px 0; }
     header { padding: 48px 0 64px; }
-    .tiles, .about-grid, .final-grid { grid-template-columns: 1fr; }
+    .tiles, .about-grid, .final-grid, .feedback-grid { grid-template-columns: 1fr; }
     .community-bar { flex-direction: column; text-align: center; gap: 18px; }
     .about-grid { gap: 24px; }
     .dance-stage { width: 190px; }
@@ -805,6 +866,15 @@
     .out-line { font-size: 18px; }
     footer .wrap { flex-direction: column; align-items: flex-start; }
     footer a { margin-left: 0; margin-right: 22px; }
+  }
+
+  @media (max-width: 480px) {
+    .share-dialog { padding: 20px; }
+    .share-option { padding: 10px; gap: 8px; }
+  }
+
+  @media (max-width: 360px) {
+    .share-options { grid-template-columns: 1fr; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -835,6 +905,7 @@
       <a class="link" href="#before">Before you download</a>
       <a class="link" href="#privacy">Privacy</a>
       <a class="link" href="#faq">FAQ</a>
+      <a class="link" href="#feedback">Feedback</a>
     </div>
     <a class="btn btn-sm" data-dl href="https://github.com/Kairukai/YapTr_Website/releases/latest/download/YapTr-1.0.0-setup.exe">Download</a>
   </div>
@@ -877,6 +948,13 @@
       </svg>
       <strong><!--DL_COUNT-->515<!--/DL_COUNT--></strong>&nbsp;downloads so far
     </p>
+
+    <div class="share-row">
+      <button class="share-trigger" type="button" data-share-open aria-haspopup="dialog" aria-controls="shareDialog" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>
+        Share YapTr
+      </button>
+    </div>
 
     <!-- live subtitle demo -->
     <div class="demo" aria-hidden="true">
@@ -1225,15 +1303,38 @@
   </div>
 </section>
 
-<section id="community">
-  <div class="wrap reveal">
-    <div class="community-bar">
+<section id="feedback" aria-labelledby="feedbackTitle">
+  <div class="wrap">
+    <p class="section-label">Bug reports &amp; feedback</p>
+    <h2 id="feedbackTitle">Found a bug? Have an idea?</h2>
+    <p class="feedback-intro">If something isn't working, something could be better, or you have a concern, I'd like to hear it.</p>
+
+    <div class="feedback-grid">
+      <article class="feedback-card" aria-labelledby="bugReportTitle">
+        <svg class="feedback-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="14" rx="5"/><path d="m9 3 1 4m5-4-1 4M3 9l4 2m10 0 4-2M3 15h4m10 0h4M4 21l4-3m8 0 4 3M12 11v6"/></svg>
+        <h3 id="bugReportTitle">Report a bug</h3>
+        <p>Tell me what went wrong, what you expected, and how to reproduce it. Include your YapTr version and a screenshot if you can.</p>
+        <a class="btn-ghost" href="https://github.com/Kairukai/YapTr_Website/issues/new?template=bug_report.yml" target="_blank" rel="noopener noreferrer">Report a bug on GitHub</a>
+      </article>
+      <article class="feedback-card" aria-labelledby="suggestionTitle">
+        <svg class="feedback-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6m-5 3h4M8.2 14.8A7 7 0 1 1 15.8 14.8c-.8.5-.8 1.2-.8 1.2H9s0-.7-.8-1.2Z"/></svg>
+        <h3 id="suggestionTitle">Share feedback</h3>
+        <p>Have a suggestion, a question, or a concern? Describe what you have in mind and how it would help you use YapTr.</p>
+        <a class="btn-ghost" href="https://github.com/Kairukai/YapTr_Website/issues/new?template=feedback.yml" target="_blank" rel="noopener noreferrer">Share feedback on GitHub</a>
+      </article>
+    </div>
+    <div class="feedback-note">
+      <span>GitHub account required. Reports are public.</span>
+      <a href="https://github.com/Kairukai/YapTr_Website/issues" target="_blank" rel="noopener noreferrer">Browse existing reports</a>
+    </div>
+
+    <div class="community-bar" id="community">
       <span class="glyph" aria-hidden="true">
         <svg viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
       </span>
       <div class="txt">
-        <h2>Come hang out.</h2>
-        <p>Bug reports, questions, or just telling me what you're watching — the Discord is the quickest way to reach me.</p>
+        <h3>Prefer a conversation?</h3>
+        <p>Questions, quick feedback, or just telling me what you're watching — come join the Discord.</p>
       </div>
       <a class="btn-ghost" href="https://discord.gg/KszM2kaWTn" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
@@ -1262,6 +1363,10 @@
           Free, no account needed &middot; Version <span data-app="version">1.0.0</span> &middot; <span data-app="size">511&nbsp;MB</span><br>
           <a class="quiet" href="https://github.com/Kairukai/YapTr_Website/releases/latest">Release notes &amp; SHA-256 checksum</a>
         </p>
+        <p class="share-invite">Know someone who watches Japanese streams?</p>
+        <div class="share-row">
+          <button class="share-trigger" type="button" data-share-open aria-haspopup="dialog" aria-controls="shareDialog" hidden>Share YapTr</button>
+        </div>
       </div>
 
       <div class="final-card support-card">
@@ -1303,13 +1408,119 @@
     <span>YapTr — free, local Japanese to English subtitles. For personal use.</span>
     <span class="spacer"></span>
     <a href="https://github.com/Kairukai/YapTr_Website/releases">All releases</a>
-    <a href="https://github.com/Kairukai/YapTr_Website/issues">Report an issue</a>
+    <a href="#feedback">Bugs &amp; feedback</a>
     <!-- Plain link, never Discord's embed widget — it loads a script from
          discord.com and would break the no-third-party-requests rule. -->
     <a href="https://discord.gg/KszM2kaWTn" target="_blank" rel="noopener noreferrer">Discord</a>
     <a href="https://ko-fi.com/kairukai" target="_blank" rel="noopener noreferrer">Ko-fi</a>
   </div>
 </footer>
+
+<dialog class="share-dialog" id="shareDialog" aria-labelledby="shareTitle" aria-describedby="shareDescription">
+  <div class="share-heading">
+    <h2 id="shareTitle">Share YapTr</h2>
+    <button class="share-close" type="button" aria-label="Close sharing options" data-share-close>&times;</button>
+  </div>
+  <p class="share-description" id="shareDescription">Know someone who watches Japanese streams? Send them free, offline English subtitles.</p>
+  <div class="share-options">
+    <a class="share-option" data-share-channel="x" href="https://x.com/intent/tweet?url=https%3A%2F%2Fyaptr.app%2F" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3L12 14.6 5.5 22H2.3l8.2-9.4L.8 2h6.4l4.5 6.8L18.9 2Zm-1.1 18h1.7L6.3 3.9H4.5L17.8 20Z"/></svg>X
+    </a>
+    <a class="share-option" data-share-channel="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fyaptr.app%2F" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 22v-9h3l.5-4H14V6.5c0-1.2.3-2 2-2h2V1.2C17.6 1.1 16.4 1 15 1c-3 0-5 1.8-5 5v3H7v4h3v9h4Z"/></svg>Facebook
+    </a>
+    <a class="share-option" data-share-channel="reddit" href="https://www.reddit.com/submit?url=https%3A%2F%2Fyaptr.app%2F&amp;type=LINK" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="15" rx="9" ry="6"/><path d="m12 9 2-6 5 1M3.5 12C0 8 0 16 3 15m17.5-3c3.5-4 3.5 4 .5 3M8 17q4 3 8 0"/><circle cx="20" cy="4" r="2"/></g><circle cx="8" cy="14" r="1.3"/><circle cx="16" cy="14" r="1.3"/></svg>Reddit
+    </a>
+    <a class="share-option" data-share-channel="whatsapp" href="https://wa.me/?text=https%3A%2F%2Fyaptr.app%2F" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.4-.2-2.7.7.7-2.6-.3-.5A8 8 0 1 1 12 20Zm4.4-5.8-1.7-.8c-.2-.1-.4-.1-.5.1l-.8 1c-.2.2-.3.2-.6.1a6.6 6.6 0 0 1-3.2-2.8c-.2-.3 0-.4.1-.5l.6-.8c.1-.2.1-.4 0-.6l-.8-1.9c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-2.2 2.3.8 6 3.4 7.4 2.6 1.4 3.6 1.3 4.6.7.5-.4.8-1.2.8-1.5 0-.2-.1-.2-.3-.3Z"/></svg>WhatsApp
+    </a>
+    <a class="share-option" data-share-channel="telegram" href="https://t.me/share/url?url=https%3A%2F%2Fyaptr.app%2F" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.5 3-3.4 17c-.3 1.2-1 1.4-2 .8l-5.2-3.9-2.5 2.4c-.3.3-.5.5-1 .5l.4-5.3L17.5 6c.4-.4-.1-.6-.6-.3L4.8 13.3l-5-1.6c-1.1-.4-1.1-1.1.3-1.6L20 2.5c.9-.3 1.7.2 1.5.5Z"/></svg>Telegram
+    </a>
+    <a class="share-option" data-share-channel="bluesky" href="https://bsky.app/intent/compose?text=https%3A%2F%2Fyaptr.app%2F" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 3.6C8 5.7 11 9.9 12 12c1-2.1 4-6.3 6.8-8.4C20.9 2 24 .8 24 4.6c0 .8-.4 6.5-.6 7.4-.8 3.3-3.8 4.1-6.5 3.6 4.8.8 6 3.5 3.3 6.2-5.1 5.3-7.3-1.3-7.9-3-.1-.3-.2-.5-.3-.5s-.2.2-.3.5c-.6 1.7-2.8 8.3-7.9 3-2.7-2.7-1.5-5.4 3.3-6.2-2.7.5-5.7-.3-6.5-3.6C.4 11.1 0 5.4 0 4.6 0 .8 3.1 2 5.2 3.6Z" transform="translate(1 0) scale(.92)"/></svg>Bluesky
+    </a>
+  </div>
+  <label class="share-link-label" for="shareLink">Or paste the link into Discord or any chat</label>
+  <div class="share-link-row">
+    <input id="shareLink" type="url" value="https://yaptr.app/" readonly spellcheck="false">
+    <button class="share-copy" type="button" id="shareCopy">Copy link</button>
+  </div>
+  <button class="share-native" type="button" id="shareNative" hidden>More sharing options&hellip;</button>
+  <p class="share-status" id="shareStatus" role="status" aria-live="polite"></p>
+</dialog>
+
+<script>
+/* Independent of the demo so sharing also works with reduced motion. */
+(function () {
+  var dialog = document.getElementById('shareDialog');
+  if (!dialog || typeof dialog.showModal !== 'function') return;
+
+  var url = 'https://yaptr.app/';
+  var text = 'Free, offline Japanese-to-English subtitles for streams, videos, and games on Windows.';
+  var status = document.getElementById('shareStatus');
+  var input = document.getElementById('shareLink');
+  var copy = document.getElementById('shareCopy');
+  var native = document.getElementById('shareNative');
+  var opener;
+
+  var encodedUrl = encodeURIComponent(url);
+  var encodedText = encodeURIComponent(text);
+  var links = {
+    x: 'https://x.com/intent/tweet?url=' + encodedUrl + '&text=' + encodedText,
+    facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodedUrl,
+    reddit: 'https://www.reddit.com/submit?url=' + encodedUrl + '&title=' + encodeURIComponent('YapTr — ' + text) + '&type=LINK',
+    whatsapp: 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + url),
+    telegram: 'https://t.me/share/url?url=' + encodedUrl + '&text=' + encodedText,
+    bluesky: 'https://bsky.app/intent/compose?text=' + encodeURIComponent(text + ' ' + url)
+  };
+  Array.prototype.forEach.call(dialog.querySelectorAll('[data-share-channel]'), function (link) {
+    var channel = link.getAttribute('data-share-channel');
+    link.href = links[channel];
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-share-open]'), function (button) {
+    button.hidden = false;
+    button.addEventListener('click', function () {
+      opener = button;
+      status.textContent = '';
+      copy.textContent = 'Copy link';
+      dialog.showModal();
+    });
+  });
+  dialog.querySelector('[data-share-close]').addEventListener('click', function () { dialog.close(); });
+  dialog.addEventListener('close', function () { if (opener) opener.focus(); });
+  dialog.addEventListener('click', function (event) {
+    if (event.target !== dialog) return;
+    var rect = dialog.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+  });
+  input.addEventListener('click', function () { input.select(); });
+
+  function manualCopy() {
+    input.focus(); input.select();
+    status.textContent = 'Select the link and copy it with Ctrl+C or your device’s copy command.';
+  }
+  copy.addEventListener('click', function () {
+    if (!navigator.clipboard || !navigator.clipboard.writeText) { manualCopy(); return; }
+    navigator.clipboard.writeText(url).then(function () {
+      copy.textContent = 'Copied!';
+      status.textContent = 'Link copied — ready to paste into your chat or post.';
+    }).catch(manualCopy);
+  });
+
+  if (typeof navigator.share === 'function') {
+    native.hidden = false;
+    native.addEventListener('click', function () {
+      status.textContent = '';
+      navigator.share({ title: 'YapTr', text: text, url: url }).catch(function (error) {
+        if (error.name !== 'AbortError') status.textContent = 'Sharing is unavailable here. Try a platform above or copy the link.';
+      });
+    });
+  }
+})();
+</script>
 
 <script>
 (function () {

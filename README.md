@@ -49,7 +49,25 @@ the release notes.
    download button on the site.
 3. Click the download button once afterwards and confirm it actually downloads.
 
+## Bug reports and feedback
+
+The site's **Bugs & feedback** section links to two GitHub issue forms:
+`bug_report.yml` for problems with the app or website, and `feedback.yml` for
+suggestions, questions, concerns, and other feedback. Both live in
+`.github/ISSUE_TEMPLATE/`. GitHub requires an account and publishes submitted
+reports; the page also offers the existing Discord link for conversation.
+The forms become available when these files land on the default branch.
+Submissions go directly to this repository's issue tracker, with no new backend,
+embedded widget, or automatic third-party requests from the website.
+
 ## Conventions
+
+The **Share YapTr** buttons open a local dialog with X, Facebook, Reddit,
+WhatsApp, Telegram, Bluesky, Copy link (for Discord or any chat), and the
+device's share sheet where supported. Links always share `https://yaptr.app/`.
+Social platforms are contacted only after the visitor selects one; no external
+widgets or SDKs load. There is no share counter: GitHub supplies installer
+download counts, but GitHub Pages cannot record anonymous share clicks.
 
 - Everything lives in `index.html`. Don't split the CSS/JS out until there's a
   second page that shares them.

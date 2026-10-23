@@ -1,0 +1,56 @@
+name: Bug report
+description: Report a problem with YapTr or its website.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve YapTr. Describe what happened as clearly as you can.
+        This report will be public. You can attach screenshots in the text fields below.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where is the problem?
+      options:
+        - Installation or startup
+        - Audio capture
+        - Subtitles or overlay
+        - Translation quality
+        - GPU mode
+        - Website or download link
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected to happen instead.
+      placeholder: Tell us what went wrong. Include the exact error message, if there is one.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: If possible, explain how to make the problem happen again.
+      placeholder: |
+        1. Open YapTr and...
+        2. ...
+        3. The problem happens when...
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: YapTr version
+      description: The version shown in the app. Leave blank for a website-only problem.
+    validations:
+      required: false
+  - type: textarea
+    id: environment
+    attributes:
+      label: Your setup and anything else that might help
+      description: Include your Windows version, CPU or GPU mode, and any useful screenshots. For website problems, include your browser and device.
+    validations:
+      required: false
